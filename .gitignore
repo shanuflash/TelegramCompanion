@@ -1,0 +1,5 @@
+config.env
+__pycache__/*
+tg_userbot.session
+tg_userbot/__pycache__/*
+tg_userbot/modules/__pycache__/**
