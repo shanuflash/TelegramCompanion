@@ -2,3 +2,4 @@ telethon
 incremental
 twisted
 python-dotenv
+PySocks
