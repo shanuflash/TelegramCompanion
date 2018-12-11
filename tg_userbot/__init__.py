@@ -21,11 +21,24 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
 parser = ArgumentParser()
 parser.add_argument('--host', help='a valid host')
 parser.add_argument('--port', help='a valid port')
+parser.add_argument('--config', help='Display all the config vsriabled in config.env',
+                    action='store_true')
 
 args = parser.parse_args()
 host = args.host
 port = args.port
 proxy = None
+
+CONFIG_VALUES = [
+        'APP_ID   : Your telegram app id from https://my.telegram.org/apps',
+        'APP_HASH : Your telegram app hash from https://my.telegram.org/apps',
+        'DB_URI   : Your postgress database url. Leave empty to disable the modules that use it',
+        'BLOCK_PM : Set to False if you want to recieve PMs or True if you dont want',
+        ]
+
+if args.config:
+    print('\n'.join(CONFIG_VALUES))
+    quit(1)
 
 dotenv.load_dotenv('config.env')
 
