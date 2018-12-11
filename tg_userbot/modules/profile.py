@@ -35,7 +35,7 @@ async def update_profile_pic(e):
                     photo.name = 'image.' + media_ext
 
             else:
-                await e.edit('`The type of this medis entity is invalid.`')
+                await e.edit('`The type of this media entity is invalid.`')
 
         if photo:
             await e.edit('`UPLOADING`')
