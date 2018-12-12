@@ -21,7 +21,7 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
 parser = ArgumentParser()
 parser.add_argument('--host', help='a valid host')
 parser.add_argument('--port', help='a valid port')
-parser.add_argument('--config', help='Display all the config vsriabled in config.env',
+parser.add_argument('--config', help='Display all the config variables',
                     action='store_true')
 
 args = parser.parse_args()
