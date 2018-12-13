@@ -19,8 +19,8 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
     quit(1)
 
 parser = ArgumentParser()
-parser.add_argument('--host', help='a valid host')
-parser.add_argument('--port', help='a valid port')
+parser.add_argument('--host', help='A valid proxy host')
+parser.add_argument('--port', help='A valid proxy port')
 parser.add_argument('--config', help='Display all the config variables',
                     action='store_true')
 
@@ -33,7 +33,7 @@ CONFIG_VALUES = [
         'APP_ID   : Your telegram app id from https://my.telegram.org/apps',
         'APP_HASH : Your telegram app hash from https://my.telegram.org/apps',
         'DB_URI   : Your postgress database url. Leave empty to disable the modules that use it',
-        'BLOCK_PM : Set to False if you want to recieve PMs or True if you dont want',
+        'BLOCK_PM : Set to True if you want to block new PMs. New PMs will be deleted and user blocked',
         ]
 
 if args.config:
@@ -54,7 +54,5 @@ if not DB_URI:
 if host and port:
     proxy = (socks.SOCKS5, host, int(port))
 
-version = f'{__version__.major}.{__version__.minor}.{__version__.micro}'
 
-client = TelegramClient('tg_userbot', APP_ID, APP_HASH, proxy=proxy, app_version=version)
-
+client = TelegramClient('tg_userbot', APP_ID, APP_HASH, proxy=proxy, app_version=__version__.public())

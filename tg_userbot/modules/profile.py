@@ -11,8 +11,6 @@ import re
 import os
 
 
-
-
 @client.on(events.NewMessage(outgoing=True, pattern='^.ppic'))
 async def update_profile_pic(e):
     if e.reply_to_msg_id:
@@ -60,7 +58,6 @@ async def update_profile_bio(e):
     bio = e.pattern_match.group(1)
     if len(bio) > 70:
         await e.edit('`Your bio is too long.`')
-
     else:
         await client(UpdateProfileRequest(
             about=bio

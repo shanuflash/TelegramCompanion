@@ -13,7 +13,6 @@ import re
 import os
 
 
-
 @client.on(events.NewMessage(outgoing=True, pattern='^.cpic'))
 async def update_profile_pic(e):
     if e.reply_to_msg_id:
@@ -115,12 +114,13 @@ async def change_profile_username(e):
             if isinstance(exc, errors.ChatNotModifiedError):
                 await e.edit("`The chat or channel wasn't modified`")
 
+
 @client.on(events.NewMessage(outgoing=True, pattern='.name (.+)'))
 async def change_profile_name(e):
     title = e.pattern_match.group(1)
     try:
         await client(EditTitleRequest(e.chat.id, title))
-        await e.edit('`Succesfully changed channel title`')
+        await e.edit('`Succesfully changed channel/chat title`')
 
     except Exception as exc:
         if isinstance(exc, errors.ChatAdminRequiredError):
