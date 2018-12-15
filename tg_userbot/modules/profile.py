@@ -47,10 +47,9 @@ async def update_profile_pic(e):
                     await e.edit('`The image is too small`')
                 if isinstance(exc, ImageProcessFailedError):
                     await e.edit('`Failure while processing the image`')
-            try:
+
+            if isinstace(photo, str):
                 os.remove(photo)
-            except Exception:
-                pass
 
 
 @client.on(events.NewMessage(outgoing=True, pattern='^.pbio (.+)'))

@@ -50,10 +50,9 @@ async def update_profile_pic(e):
 
                 if isinstance(exc, errors.PhotoInvalidError):
                     await e.edit('`The selected photo is invalid`')
-            try:
+
+            if isinstance(photo, str):
                 os.remove(photo)
-            except Exception:
-                pass
 
 
 @client.on(events.NewMessage(outgoing=True, pattern='^.cabout (.+)'))
