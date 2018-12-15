@@ -45,7 +45,7 @@ async def update_profile_pic(e):
                 await e.edit('`Channel picture changed`')
 
             except Exception as exc:
-                if isinstance(exc, errors.ChatAdminRequiredAccess):
+                if isinstance(exc, errors.ChatAdminRequiredError):
                     await e.edit('`Chat admin privileges are required to do that`')
 
                 if isinstance(exc, errors.PhotoInvalidError):
