@@ -8,7 +8,7 @@ class PM(BASE):
     chat_id = Column(Integer, primary_key=True)
 
     def __init__(self, chat_id):
-        self.chat_id = int(chat_id)
+        self.chat_id = chat_id
 
 
 PM.__table__.create(checkfirst=True)
@@ -20,5 +20,7 @@ def private_in_db(chat_id):
 
 def private_add(chat_id):
     if not private_in_db(chat_id):
-        SESSION.add(int(chat_id))
+        chat = PM(chat_id)
+
+        SESSION.add(chat)
         SESSION.commit()

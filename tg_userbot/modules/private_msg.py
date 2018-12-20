@@ -22,7 +22,10 @@ async def await_permission(e):
         chat_id = e.chat_id
         if e.out:
             sql.private_add(chat_id)
-            del PM_WARNS[chat_id]
+            try:
+                del PM_WARNS[chat_id]
+            except KeyError:
+                pass
 
         elif not sql.private_in_db(chat_id) and PM_WARNS[chat_id != 4]:
             await client.send_message(
