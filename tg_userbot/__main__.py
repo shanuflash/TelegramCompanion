@@ -19,9 +19,8 @@ async def ping(e):
     ping_time = float(end_time - start_time)*1000
     await e.edit(f'Ping time was: {ping_time}ms')
 
-if __name__ == '__main__':
+if __name__ ==  '__main__':
     async def start():
-
         await client.start()
         await client.get_me()
         await client.run_until_disconnected()

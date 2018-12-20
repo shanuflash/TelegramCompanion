@@ -34,6 +34,7 @@ CONFIG_VALUES = [
         'APP_HASH : Your telegram app hash from https://my.telegram.org/apps',
         'DB_URI   : Your postgress database url. Leave empty to disable the modules that use it',
         'BLOCK_PM : Set to True if you want to block new PMs. New PMs will be deleted and user blocked',
+        'NOPM_SPAM : Set to True if you want to block users that are spamming your PMs.',
         ]
 
 if args.config:
@@ -46,6 +47,7 @@ APP_ID = os.environ.get('APP_ID', None)
 APP_HASH = os.environ.get('APP_HASH', None)
 DB_URI = os.environ.get('DB_URI', None)
 BLOCK_PM = os.environ.get('BLOCK_PM', False)
+NOPM_SPAM = os.environ.get('NOPM_SPAM', False)
 
 DISABLED = []
 if not DB_URI:
