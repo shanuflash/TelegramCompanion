@@ -12,7 +12,7 @@ from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
 from tg_userbot import client
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^.ppic"))
+@client.on(events.NewMessage(outgoing=True, pattern="^\.ppic"))
 async def update_profile_pic(e):
     if e.reply_to_msg_id:
         message = await e.get_reply_message()
@@ -53,7 +53,7 @@ async def update_profile_pic(e):
                 os.remove(photo)
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^.pbio (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern="^\.pbio (.+)"))
 async def update_profile_bio(e):
     bio = e.pattern_match.group(1)
     if len(bio) > 70:
@@ -63,7 +63,7 @@ async def update_profile_bio(e):
         await e.edit("`Succesfully changed your bio`")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^.puname (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern="^\.puname (.+)"))
 async def change_profile_username(e):
     username = e.pattern_match.group(1)
 
@@ -90,7 +90,7 @@ async def change_profile_username(e):
             await e.edit(f"`{username} is already taken`")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern=".pname (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern="^\.pname (.+)"))
 async def change_profile_name(e):
     name = e.pattern_match.group(1)
     firstName = name.split("\\n", 1)[0]
