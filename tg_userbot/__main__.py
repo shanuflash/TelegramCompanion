@@ -3,7 +3,7 @@ import importlib
 import time
 
 import requests
-from telethon import TelegramClient, events, sync
+from telethon import events, sync
 
 from tg_userbot import LOGGER, client
 from tg_userbot.modules import MODULES
