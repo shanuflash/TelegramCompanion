@@ -69,7 +69,7 @@ async def update_profile_bio(e):
             await e.edit("`Succesfully changed chat about`")
 
         except Exception as exc:
-            if isinstance(exc, ChatAboutNotModifiedError):
+            if isinstance(exc, errors.ChatAboutNotModifiedError):
                 await e.edit("`About text has not changed.`")
 
             if isinstance(exc, errors.ChatAdminRequiredError):

@@ -49,7 +49,7 @@ async def update_profile_pic(e):
                 if isinstance(exc, ImageProcessFailedError):
                     await e.edit("`Failure while processing the image`")
 
-            if isinstace(photo, str):
+            if isinstance(photo, str):
                 os.remove(photo)
 
 
