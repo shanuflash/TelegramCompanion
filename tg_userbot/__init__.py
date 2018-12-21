@@ -52,10 +52,6 @@ DB_URI = os.environ.get("DB_URI", None)
 BLOCK_PM = os.environ.get("BLOCK_PM", False)
 NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
 
-DISABLED = []
-if not DB_URI:
-    DISABLED.append("notes")
-
 if host and port:
     proxy = (socks.SOCKS5, host, int(port))
 

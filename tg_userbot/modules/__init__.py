@@ -1,4 +1,4 @@
-from tg_userbot import DISABLED, LOGGER
+from tg_userbot import LOGGER
 
 
 def __list_modules__():
@@ -12,11 +12,6 @@ def __list_modules__():
         for f in path
         if isfile(f) and f.endswith(".py") and not f.endswith("__init__.py")
     ]
-
-    if DISABLED:
-
-        LOGGER.info(f"Disabled due empty config data: {DISABLED}")
-        return [module for module in modules if module not in DISABLED]
 
     return modules
 
