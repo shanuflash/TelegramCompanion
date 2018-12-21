@@ -8,6 +8,8 @@ from telethon import TelegramClient, events, sync
 from tg_userbot import LOGGER, client
 from tg_userbot.modules import MODULES
 
+from ._version import __version__
+
 for module_name in MODULES:
     imported_module = importlib.import_module("tg_userbot.modules." + module_name)
 
@@ -21,6 +23,11 @@ async def ping(e):
     end_time = time.time()
     ping_time = float(end_time - start_time) * 1000
     await e.edit(f"Ping time was: {ping_time}ms")
+
+
+@client.on(events.NewMessage(outgoing=True, pattern="^\.version"))
+async def version(e):
+    await e.edit("Version: `{}`".format(__version__.public()))
 
 
 if __name__ == "__main__":
