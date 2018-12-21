@@ -1,6 +1,7 @@
-from tg_userbot import client
 from telethon import events
 from telethon.tl.functions.users import GetFullUserRequest
+
+from tg_userbot import client
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.info"))
@@ -29,9 +30,8 @@ async def user_info(e):
     if full_user.about:
         REPLY += "\n\n**About User:**\n{}".format(full_user.about)
     if not full_user.user.is_self:
-        REPLY += "\n\nYou have `{}` chats in common with this user".format(
-            common_chats)
+        REPLY += "\n\nYou have `{}` chats in common with this user".format(common_chats)
 
     await client.send_message(
         e.chat_id, REPLY, reply_to=e.id, link_preview=True, file=full_user.profile_photo
-        )
+    )

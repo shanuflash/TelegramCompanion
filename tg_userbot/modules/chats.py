@@ -3,13 +3,9 @@ import os
 import re
 
 from telethon import errors, events
-from telethon.errors.rpcerrorlist import UsernameOccupiedError
-from telethon.tl.functions.channels import (
-    EditAboutRequest,
-    EditPhotoRequest,
-    EditTitleRequest,
-    UpdateUsernameRequest,
-)
+from telethon.tl.functions.channels import (EditAboutRequest, EditPhotoRequest,
+                                            EditTitleRequest,
+                                            UpdateUsernameRequest)
 from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
 
 from tg_userbot import client
@@ -106,7 +102,7 @@ async def change_profile_username(e):
             if isinstance(exc, errors.AdminsTooMuchError):
                 await e.edit(
                     "`You're admin of too many public channels, make some channels private to change the username of this channel.`"
-                    )
+                )
 
             if isinstance(exc, errors.ChatAdminRequiredError):
                 await e.edit("Chat admin privileges are required to do that")

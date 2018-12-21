@@ -31,7 +31,7 @@ async def await_permission(e):
             await client.send_message(
                 chat_id,
                 message="`Hi! This user will answer to your message soon. Please wait for his response and don't spam his PM. Thanks`",
-                )
+            )
             if chat_id not in PM_WARNS:
                 PM_WARNS.update({chat_id: 1})
             else:
@@ -41,5 +41,5 @@ async def await_permission(e):
                 await client.send_message(
                     chat_id,
                     message="You are spamming this user. I will ban you until he decides to unban you. Thanks ",
-                    )
+                )
                 await client(BlockRequest(chat_id))

@@ -5,7 +5,8 @@ import re
 from telethon import events
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import UsernameOccupiedError
-from telethon.tl.functions.account import UpdateProfileRequest, UpdateUsernameRequest
+from telethon.tl.functions.account import (UpdateProfileRequest,
+                                           UpdateUsernameRequest)
 from telethon.tl.functions.photos import UploadProfilePhotoRequest
 from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
 
