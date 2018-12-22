@@ -1,5 +1,5 @@
 from ._version import __version__
-from telethon import TelegramClient, sync
+from telethon import TelegramClient
 from argparse import ArgumentParser
 import socks
 import sys
