@@ -8,12 +8,17 @@ from telethon import events
 from tg_userbot import LOGGER, client
 from tg_userbot.modules import MODULES
 
+from . import proxy
 from ._version import __version__
 
 for module_name in MODULES:
     imported_module = importlib.import_module("tg_userbot.modules." + module_name)
 
-LOGGER.info("Your userbot is running. Type .ping in any chat to test it")
+if proxy:
+    LOGGER.info("Connecting to Telegram over proxy: {}:{}".format(proxy[1], proxy[2]))
+    LOGGER.info("Use .ping in any chat to see if your userbot has connected.")
+else:
+    LOGGER.info("Your userbot is running. Type .ping in any chat to test it")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^.ping"))
