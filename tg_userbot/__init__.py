@@ -9,7 +9,7 @@ import dotenv
 
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
 )
 
 LOGGER = logging.getLogger(__name__)
