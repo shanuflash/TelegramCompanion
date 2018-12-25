@@ -20,21 +20,6 @@ if proxy:
 else:
     LOGGER.info("Your userbot is running. Type .ping in any chat to test it")
 
-
-@client.on(events.NewMessage(outgoing=True, pattern="^.ping"))
-async def ping(e):
-    start_time = time.time()
-    requests.get("https://api.telegram.org")
-    end_time = time.time()
-    ping_time = float(end_time - start_time) * 1000
-    await e.edit(f"Ping time was: {ping_time}ms")
-
-
-@client.on(events.NewMessage(outgoing=True, pattern="^\.version"))
-async def version(e):
-    await e.edit("Version: `{}`".format(__version__.public()))
-
-
 if __name__ == "__main__":
 
     async def start():
