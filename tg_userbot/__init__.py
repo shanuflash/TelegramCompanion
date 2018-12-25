@@ -48,13 +48,16 @@ dotenv.load_dotenv("config.env")
 APP_ID = os.environ.get("APP_ID", None)
 APP_HASH = os.environ.get("APP_HASH", None)
 DB_URI = os.environ.get("DB_URI", None)
-BLOCK_PM = os.environ.get("BLOCK_PM", False)
-NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
+
 PROXY_TYPE = os.environ.get("PROXY_TYPE", None)
 HOST = os.environ.get("HOST", None)
 PORT = os.environ.get("PORT", None)
 USERNAME = os.environ.get("USERNAME", None)
 PASSWORD = os.environ.get("PASSWORD", None)
+
+BLOCK_PM = os.environ.get("BLOCK_PM", False)
+NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
+
 
 # Proxy Settings
 proxy = None
