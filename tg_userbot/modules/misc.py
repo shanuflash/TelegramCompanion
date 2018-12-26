@@ -5,6 +5,7 @@ from telethon import events
 from telethon.tl.functions.users import GetFullUserRequest
 
 from tg_userbot import client
+from tg_userbot.modules.sql import stats_sql as sql
 
 from .._version import __version__
 
@@ -54,3 +55,51 @@ async def user_info(e):
     await client.send_message(
         e.chat_id, REPLY, reply_to=e.id, link_preview=True, file=full_user.profile_photo
     )
+
+
+@client.on(events.NewMessage(outgoing=True, pattern="^\.stats"))
+async def show_stats(e):
+    stats = sql.get_stats()
+    if stats:
+        updatetime, totaldialogs, usercount, channelcount, supcount, convertedgroups, numchannel, numuser, numdeleted, numbot, numchat, numsuper = stats
+
+        if convertedgroups != 0:
+            if convertedgroups != numsuper:
+                convertedgroups = convertedgroups
+            else:
+                convertedgroups = 'all'
+        else:
+            convertedgroups = ''
+
+        REPLY = """
+
+    **\nMESSAGES COUNTS:**
+    Normal groups and chats: `{}`
+    Channels: `{}`
+    Supergroups: `{}`
+    TOTAL MESSAGES: `{}`
+
+    **\nCHAT COUNTS:**
+    Number of Channels: `{}`
+    Number of Supergroups: `{}` from where `{}` of them converted from normal groups.
+    Number of Normal groups: `{}`
+    Number of Private conversations: `{}` from where `{}` are now Deleted Accounts.
+    Number of Bot conversations:  `{}`
+    Last Update Time :  `{} `
+        """.format(
+            usercount,
+            channelcount,
+            supcount,
+            totaldialogs,
+            numchannel,
+            numsuper,
+            convertedgroups,
+            numchat,
+            numuser,
+            numdeleted,
+            numbot,
+            updatetime
+        )
+        await e.edit(REPLY)
+    else:
+        await e.edit('`Stats are unavailable `.')

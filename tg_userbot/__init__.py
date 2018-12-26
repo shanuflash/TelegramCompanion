@@ -57,6 +57,8 @@ PASSWORD = os.environ.get("PASSWORD", None)
 
 BLOCK_PM = os.environ.get("BLOCK_PM", False)
 NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
+RUN_STATS = os.environ.get("STATS", True)
+STATS_TIMER = os.environ.get("STATS_TIMER", 3600)
 
 
 # Proxy Settings

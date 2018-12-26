@@ -1,12 +1,9 @@
 import asyncio
 import importlib
-import time
-
-import requests
-from telethon import events
 
 from tg_userbot import LOGGER, client
 from tg_userbot.modules import MODULES
+from tg_userbot.modules.sql.stats_sql import GetStats
 
 from . import proxy
 from ._version import __version__
@@ -20,12 +17,19 @@ if proxy:
 else:
     LOGGER.info("Your userbot is running. Type .ping in any chat to test it")
 
+
 if __name__ == "__main__":
 
-    async def start():
+    async def RunClient():
         await client.start()
         await client.get_me()
         await client.run_until_disconnected()
+
+    async def start():
+        task = [asyncio.Task(RunClient()),
+                asyncio.Task(GetStats())]
+
+        done, pending = await asyncio.wait(task)
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(start())
