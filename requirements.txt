@@ -6,3 +6,4 @@ python-dotenv
 PySocks
 psycopg2-binary
 sqlalchemy
+progressbar2
