@@ -7,3 +7,4 @@ PySocks
 psycopg2-binary
 sqlalchemy
 progressbar2
+requests
