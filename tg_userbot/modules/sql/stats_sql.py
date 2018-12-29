@@ -3,7 +3,6 @@ import time
 import progressbar
 from sqlalchemy import Column, Integer, UnicodeText
 from telethon import utils
-from telethon.tl import types
 from telethon.tl.functions.channels import GetFullChannelRequest
 
 from tg_userbot import LOGGER, RUN_STATS, STATS_TIMER, client

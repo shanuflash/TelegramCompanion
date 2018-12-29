@@ -6,7 +6,6 @@ from tg_userbot.modules import MODULES
 from tg_userbot.modules.sql.stats_sql import GetStats
 
 from . import proxy
-from ._version import __version__
 
 for module_name in MODULES:
     imported_module = importlib.import_module("tg_userbot.modules." + module_name)
