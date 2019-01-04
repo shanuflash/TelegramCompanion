@@ -61,7 +61,7 @@ async def update_profile_bio(e):
 
     else:
         try:
-            await client(EditAboutRequest(e.chat.id, about))
+            await client(EditAboutRequest(e.chat_id, about))
             await e.edit("`Succesfully changed chat about`")
 
         except Exception as exc:
@@ -95,7 +95,7 @@ async def change_profile_username(e):
 
     else:
         try:
-            await client(UpdateUsernameRequest(e.chat.id, username))
+            await client(UpdateUsernameRequest(e.chat_id, username))
             await e.edit("`Succesfully changed channel username`")
 
         except Exception as exc:
@@ -118,7 +118,7 @@ async def change_profile_username(e):
 async def change_profile_name(e):
     title = e.pattern_match.group(1)
     try:
-        await client(EditTitleRequest(e.chat.id, title))
+        await client(EditTitleRequest(e.chat_id, title))
         await e.edit("`Succesfully changed channel/chat title`")
 
     except Exception as exc:

@@ -20,7 +20,7 @@ async def no_afk(e):
     if ".afk" not in e.text:
         remove_afk = sql.rm_afk()
         if remove_afk:
-            await client.send_message(e.chat.id, "`I'm no longer afk`")
+            await client.send_message(e.chat_id, "`I'm no longer afk`")
 
 
 @client.on(events.NewMessage(incoming=True))
@@ -33,4 +33,4 @@ async def reply_afk(e):
                     REPLY = "`I'm afk so please wait for me to reply`"
                 else:
                     REPLY = "I'm afk because of: \n`{}``".format(reason)
-                await client.send_message(e.chat.id, REPLY, reply_to=e.id)
+                await client.send_message(e.chat_id, REPLY, reply_to=e.id)
