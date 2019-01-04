@@ -25,12 +25,12 @@ async def no_afk(e):
 
 @client.on(events.NewMessage(incoming=True))
 async def reply_afk(e):
-    if e.mentioned:
+    if e.mentioned or e.is_private:
         if sql.is_afk():
             valid, reason = sql.check_afk()
             if valid:
                 if not reason:
                     REPLY = "`I'm afk so please wait for me to reply`"
                 else:
-                    REPLY = "I'm afk because of: \n`{}``".format(reason)
+                    REPLY = "I'm afk because of: \n`{}`".format(reason)
                 await client.send_message(e.chat_id, REPLY, reply_to=e.id)
