@@ -114,7 +114,7 @@ async def change_profile_username(e):
                 await e.edit("`The chat or channel wasn't modified`")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.name (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern="^\.cname (.+)"))
 async def change_profile_name(e):
     title = e.pattern_match.group(1)
     try:
