@@ -1,7 +1,6 @@
 import asyncio
 
-from tg_userbot import LOGGER
-
+from tg_userbot import LOGGER, client
 
 def timer(seconds=3600, min_value=None, max_value=None, run=True):
     """Run a decorated function every x seconds.
@@ -15,6 +14,8 @@ def timer(seconds=3600, min_value=None, max_value=None, run=True):
     """
     def scheduler(fcn):
         async def wrapper():
+            while not client.is_connected():
+                await asyncio.sleep(1)
             if run:
                 if min_value:
                     if seconds < min_value:
