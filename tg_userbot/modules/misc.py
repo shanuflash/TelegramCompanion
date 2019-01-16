@@ -2,7 +2,9 @@ import logging
 import re
 import time
 
+import platform
 import requests
+import telethon
 from telethon import events
 from telethon.tl.functions.users import GetFullUserRequest
 
@@ -24,7 +26,11 @@ async def ping(e):
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.version"))
 async def version(e):
-    await e.edit("Version: `{}`".format(__version__.public()))
+    bot_version = __version__.public()
+    python_version = platform.python_version()
+    telethon_version = telethon.__version__
+
+    await e.edit(f"__Bot Version__ = `{bot_version}`\n\n__Python Version__ = `{python_version}`\n\n__Telethon Version__ = {telethon_version}")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.info"))
