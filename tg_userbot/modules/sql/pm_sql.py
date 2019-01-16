@@ -1,7 +1,5 @@
 from sqlalchemy import Column, Integer
-
-from . import BASE, SESSION
-
+from tg_userbot.modules.sql import BASE, SESSION
 
 class PM(BASE):
     __tablename__ = "private_messages"

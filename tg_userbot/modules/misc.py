@@ -30,6 +30,8 @@ async def version(e):
 @client.on(events.NewMessage(outgoing=True, pattern="^\.info"))
 async def user_info(e):
     user = await e.get_sender()
+    chat = await e.get_chat()
+
     if e.reply_to_msg_id:
         message = await e.get_reply_message()
         user = await message.get_sender()
@@ -56,7 +58,7 @@ async def user_info(e):
         REPLY += "\n\nYou have `{}` chats in common with this user".format(common_chats)
 
     await client.send_message(
-        e.chat_id, REPLY, reply_to=e.id, link_preview=True, file=full_user.profile_photo
+        chat.id, REPLY, reply_to=e.id, link_preview=True, file=full_user.profile_photo
     )
 
 
@@ -64,15 +66,17 @@ async def user_info(e):
 async def show_stats(e):
     stats = sql.get_stats()
     if stats:
-        updatetime, totaldialogs, usercount, channelcount, supcount, convertedgroups, numchannel, numuser, numdeleted, numbot, numchat, numsuper = stats
+        updatetime, totaldialogs, usercount, channelcount, supcount, convertedgroups, numchannel, numuser, numdeleted, numbot, numchat, numsuper = (
+            stats
+        )
 
         if convertedgroups != 0:
             if convertedgroups != numsuper:
                 convertedgroups = convertedgroups
             else:
-                convertedgroups = 'all'
+                convertedgroups = "all"
         else:
-            convertedgroups = ''
+            convertedgroups = ""
 
         REPLY = """
 
@@ -101,11 +105,12 @@ async def show_stats(e):
             numuser,
             numdeleted,
             numbot,
-            updatetime
+            updatetime,
         )
         await e.edit(REPLY)
     else:
-        await e.edit('`Stats are unavailable `.')
+        await e.edit("`Stats are unavailable `.")
+
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\$"))
 async def rextestercli(e):
@@ -113,12 +118,14 @@ async def rextestercli(e):
     message = e.text
 
     if len(message.split()) > 1:
-        regex = re.search('^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$', message, re.IGNORECASE)
+        regex = re.search(
+            "^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$",
+            message,
+            re.IGNORECASE,
+        )
         language = regex.group(1)
         code = regex.group(2)
         stdin = regex.group(3)
-
-
 
         try:
             regexter = Rextester(language, code, stdin)

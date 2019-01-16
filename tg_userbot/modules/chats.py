@@ -13,8 +13,9 @@ from tg_userbot import client
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.cpic"))
 async def update_profile_pic(e):
-    if e.reply_to_msg_id:
+    if e.reply:
         message = await e.get_reply_message()
+        chat = await e.get_chat()
         photo = None
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
@@ -39,7 +40,7 @@ async def update_profile_pic(e):
             await e.edit("`UPLOADING`")
             file = await client.upload_file(photo)
             try:
-                await client(EditPhotoRequest(e.chat_id, file))
+                await client(EditPhotoRequest(chat.id, file))
                 await e.edit("`Channel picture changed`")
 
             except Exception as exc:
@@ -56,12 +57,13 @@ async def update_profile_pic(e):
 @client.on(events.NewMessage(outgoing=True, pattern="^\.cabout (.+)"))
 async def update_profile_bio(e):
     about = e.pattern_match.group(1)
+    chat = await e.get_chat()
     if len(about) > 255:
         await e.edit("`Channel about is too long.`")
 
     else:
         try:
-            await client(EditAboutRequest(e.chat_id, about))
+            await client(EditAboutRequest(chat.id, about))
             await e.edit("`Succesfully changed chat about`")
 
         except Exception as exc:
@@ -78,6 +80,7 @@ async def update_profile_bio(e):
 @client.on(events.NewMessage(outgoing=True, pattern="^\.cuname (.+)"))
 async def change_profile_username(e):
     username = e.pattern_match.group(1)
+    chat = await e.get_chat()
 
     if "@" in username:
         username = username[1:]
@@ -95,7 +98,7 @@ async def change_profile_username(e):
 
     else:
         try:
-            await client(UpdateUsernameRequest(e.chat_id, username))
+            await client(UpdateUsernameRequest(chat.id, username))
             await e.edit("`Succesfully changed channel username`")
 
         except Exception as exc:
@@ -117,8 +120,9 @@ async def change_profile_username(e):
 @client.on(events.NewMessage(outgoing=True, pattern="^\.cname (.+)"))
 async def change_profile_name(e):
     title = e.pattern_match.group(1)
+    chat = await e.get_chat()
     try:
-        await client(EditTitleRequest(e.chat_id, title))
+        await client(EditTitleRequest(chat.id, title))
         await e.edit("`Succesfully changed channel/chat title`")
 
     except Exception as exc:

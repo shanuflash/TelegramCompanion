@@ -1,9 +1,7 @@
 import threading
 
 from sqlalchemy import Boolean, Column, UnicodeText
-
-from . import BASE, SESSION
-
+from tg_userbot.modules.sql import BASE, SESSION
 
 class AFK(BASE):
     __tablename__ = "afk"

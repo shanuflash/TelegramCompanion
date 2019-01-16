@@ -36,8 +36,8 @@ CONFIG_VALUES = [
     "PORT           : The port of the used proxy.",
     "USERNAME       : The username of the used proxy. (If any)",
     "PASSWORD       : The password of the used proxy. (If any)",
-    "SESSION_NAME   : Custom session name. Leave empty to use the default session name"
-    "FORCE_SMS      : Set true to get the security code though SMS "
+    "SESSION_NAME   : Custom session name. Leave empty to use the default session name",
+    "FORCE_SMS      : Set true to get the security code though SMS ",
 ]
 
 args = parser.parse_args()
