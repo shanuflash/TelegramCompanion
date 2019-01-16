@@ -1,7 +1,7 @@
 import asyncio
 import importlib
 
-from tg_userbot import LOGGER, client
+from tg_userbot import LOGGER, FORCE_SMS, client
 from tg_userbot.modules import MODULES
 from tg_userbot.modules.sql.stats_sql import GetStats
 
@@ -20,7 +20,7 @@ else:
 if __name__ == "__main__":
 
     async def RunClient():
-        await client.start()
+        await client.start(force_sms=FORCE_SMS)
         await client.get_me()
         await client.run_until_disconnected()
 

@@ -26,16 +26,18 @@ parser.add_argument(
 )
 
 CONFIG_VALUES = [
-    "APP_ID     : Your telegram app id from https://my.telegram.org/apps",
-    "APP_HASH   : Your telegram app hash from https://my.telegram.org/apps",
-    "DB_URI     : Your postgress database url. Leave empty to disable the modules that use it",
-    "BLOCK_PM   : Set to True if you want to block new PMs. New PMs will be deleted and user blocked",
-    "NOPM_SPAM  : Set to True if you want to block users that are spamming your PMs.",
-    "PROXY_TYPE : Your proxy type HTTP/SOCKS4/SOCKS5. Leave empty to disable proxy.",
-    "HOST       : The host of the used proxy.",
-    "PORT       : The port of the used proxy.",
-    "USERNAME   : The username of the used proxy. (If any)",
-    "PASSWORD   : The password of the used proxy. (If any)",
+    "APP_ID         : Your telegram app id from https://my.telegram.org/apps",
+    "APP_HASH       : Your telegram app hash from https://my.telegram.org/apps",
+    "DB_URI         : Your postgress database url. Leave empty to disable the modules that use it",
+    "BLOCK_PM       : Set to True if you want to block new PMs. New PMs will be deleted and user blocked",
+    "NOPM_SPAM      : Set to True if you want to block users that are spamming your PMs.",
+    "PROXY_TYPE     : Your proxy type HTTP/SOCKS4/SOCKS5. Leave empty to disable proxy.",
+    "HOST           : The host of the used proxy.",
+    "PORT           : The port of the used proxy.",
+    "USERNAME       : The username of the used proxy. (If any)",
+    "PASSWORD       : The password of the used proxy. (If any)",
+    "SESSION_NAME   : Custom session name. Leave empty to use the default session name"
+    "FORCE_SMS      : Set true to get the security code though SMS "
 ]
 
 args = parser.parse_args()
@@ -47,6 +49,8 @@ dotenv.load_dotenv("config.env")
 
 APP_ID = os.environ.get("APP_ID", None)
 APP_HASH = os.environ.get("APP_HASH", None)
+SESSION_NAME = os.environ.get("SESSION_NAME", "tg_userbot")
+FORCE_SMS = os.environ.get("FORCE_SMS", False)
 DB_URI = os.environ.get("DB_URI", None)
 
 PROXY_TYPE = os.environ.get("PROXY_TYPE", None)
@@ -57,7 +61,7 @@ PASSWORD = os.environ.get("PASSWORD", None)
 
 BLOCK_PM = os.environ.get("BLOCK_PM", False)
 NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
-RUN_STATS = os.environ.get("STATS", True)
+RUN_STATS = os.environ.get("STATS", False)
 STATS_TIMER = os.environ.get("STATS_TIMER", 3600)
 
 
@@ -83,5 +87,5 @@ if USERNAME and PASSWORD:
     proxy = (proxy_type, proxy_addr, proxy_port, False, proxy_username, proxy_password)
 
 client = TelegramClient(
-    "tg_userbot", APP_ID, APP_HASH, proxy=proxy, app_version=__version__.public()
+    SESSION_NAME, APP_ID, APP_HASH, proxy=proxy, app_version=__version__.public()
 )
