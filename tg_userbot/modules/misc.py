@@ -9,7 +9,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from tg_userbot import client
 from tg_userbot.modules.rextester.api import CompilerError, Rextester
 from tg_userbot.modules.sql import stats_sql as sql
-
+from telethon.tl.types import User
 from .._version import __version__
 
 
@@ -29,12 +29,25 @@ async def version(e):
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.info"))
 async def user_info(e):
+    message = e.message
     user = await e.get_sender()
     chat = await e.get_chat()
 
     if e.reply_to_msg_id:
         message = await e.get_reply_message()
         user = await message.get_sender()
+
+    if len(e.text.split()) > 1:
+        user = e.text.split()[1]
+        try:
+            user = await client.get_entity(user)
+        except Exception as exc:
+            await e.reply(str(exc))
+            return
+
+        if not isinstance(user, User):
+            await e.reply('`{}` is not a User'.format(user))
+            return
 
     full_user = await client(GetFullUserRequest(user.id))
     firstName = full_user.user.first_name
@@ -58,7 +71,7 @@ async def user_info(e):
         REPLY += "\n\nYou have `{}` chats in common with this user".format(common_chats)
 
     await client.send_message(
-        chat.id, REPLY, reply_to=e.id, link_preview=True, file=full_user.profile_photo
+        chat.id, REPLY, reply_to=message.id, link_preview=True, file=full_user.profile_photo
     )
 
 
