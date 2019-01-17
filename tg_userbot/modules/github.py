@@ -44,8 +44,6 @@ async def github(e):
     REPLY += "\nRepos: \n\n"
 
     for nr in range(len(result)):
-        REPLY += "  [{}]({})\n".format(
-            result[nr].get("name", None), result[nr].get("html_url", None)
-        )
+        REPLY += f"  [{result[nr].get('name', None)}]({result[nr].get('html_url', None)})\n"
 
     await client.send_message(chat.id, message=REPLY, reply_to=e.id, link_preview=False)

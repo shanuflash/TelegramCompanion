@@ -22,13 +22,13 @@ def timer(seconds=3600, min_value=None, max_value=None, run=True):
                 if min_value:
                     if seconds < min_value:
                         LOGGER.error(
-                            "The timer can't be lower than {} seconds".format(seconds)
+                            f"The timer can't be lower than {seconds} seconds"
                         )
                         quit(1)
                 if max_value:
                     if seconds > max_value:
                         LOGGER.error(
-                            "The timer can't be higher than {} seconds".format(seconds)
+                            f"The timer can't be higher than {seconds} seconds"
                         )
                         quit(1)
                 while 1:

@@ -302,4 +302,4 @@ async def GetStats():
     FirstRun = False
 
     LOGGER.info("DONE!! Stats updated. Get them using .stats!")
-    LOGGER.info("The stats will be updated every {}s".format(STATS_TIMER))
+    LOGGER.info(f"The stats will be updated every {STATS_TIMER}s")

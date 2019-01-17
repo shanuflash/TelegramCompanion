@@ -33,5 +33,5 @@ async def reply_afk(e):
                 if not reason:
                     REPLY = "`I'm afk so please wait for me to reply`"
                 else:
-                    REPLY = "I'm afk because of: \n`{}`".format(reason)
+                    REPLY = f"I'm afk because of: \n`{reason}`"
                 await client.send_message(chat.id, REPLY, reply_to=e.id)

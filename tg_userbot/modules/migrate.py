@@ -62,9 +62,7 @@ async def account_migrate(e):
                                 FAILED_CHATS.append(chat.id)
                                 FAILED_CHATS_COUNT = FAILED_CHATS_COUNT + 1
 
-                REPLY = "Failed to migrate `{}` chat because a problem has occurred or you are already in those groups/channels\n".format(
-                    FAILED_CHATS_COUNT
-                )
+                REPLY = f"Failed to migrate `{FAILED_CHATS_COUNT}` chat because a problem has occurred or you are already in those groups/channels\n"
 
                 await e.reply(REPLY)
         else:

@@ -52,7 +52,7 @@ async def user_info(e):
             return
 
         if not isinstance(user, User):
-            await e.reply('`{}` is not a User'.format(user))
+            await e.reply(f"`{user}` is not a User")
             return
 
     full_user = await client(GetFullUserRequest(user.id))
@@ -64,17 +64,17 @@ async def user_info(e):
 
     REPLY = "**User Info:**\n"
 
-    REPLY += "\nFirst Name: {}".format(firstName)
+    REPLY += f"\nFirst Name: {firstName}"
 
     if lastName:
-        REPLY += "\nLast Name: {}".format(lastName)
+        REPLY += f"\nLast Name: {lastName}"
     if username:
-        REPLY += "\nUsername: @{}".format(username)
-    REPLY += "\nPermanent user link: [link](tg://user?id={})".format(user_id)
+        REPLY += f"\nUsername: @{username}"
+    REPLY += f"\nPermanent user link: [link](tg://user?id={user_id})"
     if full_user.about:
-        REPLY += "\n\n**About User:**\n{}".format(full_user.about)
+        REPLY += f"\n\n**About User:**\n{full_user.about}"
     if not full_user.user.is_self:
-        REPLY += "\n\nYou have `{}` chats in common with this user".format(common_chats)
+        REPLY += f"\n\nYou have `{common_chats}` chats in common with this user"
 
     await client.send_message(
         chat.id, REPLY, reply_to=message.id, link_preview=True, file=full_user.profile_photo
@@ -97,35 +97,23 @@ async def show_stats(e):
         else:
             convertedgroups = ""
 
-        REPLY = """
+        REPLY = f"""
 
     **\nMESSAGES COUNTS:**
-    Normal groups and chats: `{}`
-    Channels: `{}`
-    Supergroups: `{}`
-    TOTAL MESSAGES: `{}`
+    Normal groups and chats: `{usercount}`
+    Channels: `{channelcount}`
+    Supergroups: `{supcount}`
+    TOTAL MESSAGES: `{totaldialogs}`
 
     **\nCHAT COUNTS:**
-    Number of Channels: `{}`
-    Number of Supergroups: `{}` from where `{}` of them converted from normal groups.
-    Number of Normal groups: `{}`
-    Number of Private conversations: `{}` from where `{}` are now Deleted Accounts.
-    Number of Bot conversations:  `{}`
-    Last Update Time :  `{} `
-        """.format(
-            usercount,
-            channelcount,
-            supcount,
-            totaldialogs,
-            numchannel,
-            numsuper,
-            convertedgroups,
-            numchat,
-            numuser,
-            numdeleted,
-            numbot,
-            updatetime,
-        )
+    Number of Channels: `{numchannel}`
+    Number of Supergroups: `{numsuper}` from where `{convertedgroups}` of them converted from normal groups.
+    Number of Normal groups: `{numchat}`
+    Number of Private conversations: `{numuser}` from where `{numdeleted}` are now Deleted Accounts.
+    Number of Bot conversations:  `{numbot}`
+    Last Update Time :  `{updatetime} `
+    """
+
         await e.edit(REPLY)
     else:
         await e.edit("`Stats are unavailable `.")
@@ -153,16 +141,16 @@ async def rextestercli(e):
             return
 
         output = ""
-        output += "**Language:**\n```{}```".format(language)
-        output += "\n\n**Source:** \n```{}```".format(code)
+        output += f"**Language:**\n```{language}```"
+        output += f"\n\n**Source:** \n```{code}```"
 
         if regexter.result:
-            output += "\n\n**Result:** \n```{}```".format(regexter.result)
+            output += f"\n\n**Result:** \n```{regexter.result}```"
 
         if regexter.warnings:
-            output += "\n\n**Warnings:** \n```{}```\n".format(regexter.warnings)
+            output += f"\n\n**Warnings:** \n```{regexter.warnings}```\n"
 
         if regexter.errors:
-            output += "\n\n**Errors:** \n'```{}```".format(regexter.errors)
+            output += f"\n\n**Errors:** \n'```{regexter.errors}```"
 
         await e.edit(output)
