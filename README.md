@@ -74,6 +74,21 @@ pip3 install -r requirements.txt
 > - `USERNAME` = The username of the used proxy. (If any)
 >
 > - `PASSWORD` = The password of the used proxy. (If any)
+>
+> - `ENABLE_SSH` = Set True if you want to execute or upload from a ssh server"
+>
+> - `SSH_HOSTNAME` = SSH: (optional) The hostname or address to connect to.
+>
+> - `SSH_PORT` = SSH: (optional) The port number to connect to.
+>
+> - `SSH_USERNAME` = SSH: (optional) Username to authenticate as on the server.
+>
+> - `SSH_PASSWORD` = SSH: (optional) The password to use for client password authentication
+>
+> - `SSH_PASSPHRASE` = SSH: (optional) The passphrase for your ssh connection.
+>
+> - `SSH_KEY` =  SSH: (optional) The private key which will be used to authenticate this client"
+
 
 ---
 # Features
@@ -103,6 +118,14 @@ pip3 install -r requirements.txt
 > - `.info` `<optional-username>` - Send it as a message to get your info, reply to one or use the command followed by a username to get user info
 >
 > - `.github` `<github-username>` - Get the info and repositories of any github user
+>
+> - `.term` `<command>` - Execute bash commands
+>
+> - `.rterm` `<command>` - Execute bash commands on a ssh server
+>
+> - `.upload` `<command>` - Upload files
+>
+> - `.rupload` `<command>` - Upload files from a ssh server
 >
 > - `$<language>` `<code>` - Execute code in any programming language using rextester.com api
    - Available languages are:

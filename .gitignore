@@ -1,5 +1,7 @@
 config.env
+id_rsa
 __pycache__/*
+logs
 tg_userbot.session
 tg_userbot.session-journal
 tg_userbot/__pycache__/*

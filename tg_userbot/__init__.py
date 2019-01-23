@@ -38,7 +38,14 @@ CONFIG_VALUES = [
     "PASSWORD       : The password of the used proxy. (If any)",
     "SESSION_NAME   : Custom session name. Leave empty to use the default session name",
     "FORCE_SMS      : Set true to get the security code though SMS ",
-]
+    "ENABLE_SSH     : Set True if you want to execute/upload from a ssh server",
+    "SSH_HOSTNAME   : SSH: (optional) The hostname or address to connect to.",
+    "SSH_PORT       : SSH: (optional) The hostname or address to connect to.",
+    "SSH_USERNAME   : SSH: (optional) Username to authenticate as on the server.",
+    "SSH_PASSWORD   : SSH: (optional) The password to use for client password authentication",
+    "SSH_PASSPHRASE : SSH: (optional) The passphrase for your ssh connection.",
+    "SSH_KEY        : SSH: (optional) The private key which will be used to authenticate this client",
+    ]
 
 args = parser.parse_args()
 if args.config:
@@ -64,6 +71,13 @@ NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
 RUN_STATS = os.environ.get("STATS", False)
 STATS_TIMER = os.environ.get("STATS_TIMER", 3600)
 
+ENABLE_SSH = os.environ.get('ENABLE_SSH', False)
+SSH_HOSTNAME = os.environ.get('SSH_HOSTNAME', '::1')
+SSH_PORT = os.environ.get('SSH_PORT', 22)
+SSH_USERNAME = os.environ.get('SSH_USERNAME', None)
+SSH_PASSWORD = os.environ.get('SSH_PASSWORD', None)
+SSH_PASSPHRASE = os.environ.get('SSH_PASSPHRASE', None)
+SSH_KEY = os.environ.get('SSH_KEY', None)
 
 # Proxy Settings
 proxy = None
