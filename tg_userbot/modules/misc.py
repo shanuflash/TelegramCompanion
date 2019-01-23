@@ -1,20 +1,25 @@
+import os
 import re
 import time
 
 import platform
 import requests
 import telethon
+import zipfile
+import io
 from telethon import events
 from telethon.tl.functions.users import GetFullUserRequest
 
 from tg_userbot import client
 from tg_userbot.modules.rextester.api import CompilerError, Rextester
+from tg_userbot.utils.decorators import log_exception
 from tg_userbot.modules.sql import stats_sql as sql
 from telethon.tl.types import User
 from .._version import __version__
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.ping"))
+@log_exception
 async def ping(e):
     start_time = time.time()
     requests.get("https://api.telegram.org")
@@ -24,6 +29,7 @@ async def ping(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.version"))
+@log_exception
 async def version(e):
     bot_version = __version__.public()
     python_version = platform.python_version()
@@ -33,6 +39,7 @@ async def version(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.info"))
+@log_exception
 async def user_info(e):
     message = e.message
     user = await e.get_sender()
@@ -81,6 +88,7 @@ async def user_info(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.stats"))
+@log_exception
 async def show_stats(e):
     stats = sql.get_stats()
     if stats:
@@ -119,6 +127,7 @@ async def show_stats(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\$"))
+@log_exception
 async def rextestercli(e):
     stdin = ""
     message = e.text
@@ -153,3 +162,30 @@ async def rextestercli(e):
             output += f"\n\n**Errors:** \n'```{regexter.errors}```"
 
         await e.edit(output)
+
+@client.on(events.NewMessage(outgoing=True, pattern="^\.sendlog"))
+@log_exception
+async def send_logs(e):
+
+    if os.path.exists("logs/"):
+
+        files_in_dir = os.listdir("logs/")
+        chat = await e.get_chat()
+
+        if len(files_in_dir) == 1:
+            print(files_in_dir[0])
+            await client.send_file(chat.id, file=f"logs/{files_in_dir[0]}", allow_cache=False)
+            await e.delete()
+            return
+
+        elif len(files_in_dir) > 1:
+            with io.BytesIO() as memzip:
+                with zipfile.ZipFile(memzip, mode="w") as zf:
+                    for logfile in files_in_dir:
+                        zf.write(f"logs/{logfile}")
+                memzip.seek(0)
+                memzip.name = "Logs.zip"
+                await client.send_file(chat.id, file=memzip, allow_cache=False)
+                await e.delete()
+    else:
+        await e.edit("There are no logs to send")

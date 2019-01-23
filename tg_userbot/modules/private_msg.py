@@ -2,12 +2,14 @@ from telethon import events
 from telethon.tl.functions.contacts import BlockRequest
 
 from tg_userbot import BLOCK_PM, NOPM_SPAM, client
+from tg_userbot.utils.decorators import log_exception
 from tg_userbot.modules.sql import pm_sql as sql
 
 PM_WARNS = {}
 
 
 @client.on(events.NewMessage(incoming=True))
+@log_exception
 async def pm_ban(e):
     chat = await e.get_chat()
     if BLOCK_PM is True:
@@ -17,6 +19,7 @@ async def pm_ban(e):
 
 
 @client.on(events.NewMessage(incoming=True, outgoing=True))
+@log_exception
 async def await_permission(e):
     global PM_WARNS
     if NOPM_SPAM is True and e.is_private:

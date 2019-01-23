@@ -7,7 +7,7 @@ from telethon.tl.functions.channels import GetFullChannelRequest
 
 from tg_userbot import LOGGER, RUN_STATS, STATS_TIMER, client
 from tg_userbot.modules.sql import BASE, SESSION
-from tg_userbot.utils.decorators import timer
+from tg_userbot.utils.decorators import timer, log_exception
 
 
 class STATS(BASE):
@@ -68,6 +68,7 @@ STATS.__table__.create(checkfirst=True)
 GroupsInfo.__table__.create(checkfirst=True)
 
 
+
 def get_stats():
     cursor = SESSION.query(STATS).first()
     try:
@@ -96,6 +97,7 @@ FirstRun = True
 
 
 @timer(seconds=STATS_TIMER, min_value=1800, run=RUN_STATS)
+@log_exception
 async def GetStats():
     global FirstRun
 

@@ -11,9 +11,11 @@ from telethon.tl.functions.photos import UploadProfilePhotoRequest
 from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
 
 from tg_userbot import client
+from tg_userbot.utils.decorators import log_exception
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.ppic"))
+@log_exception
 async def update_profile_pic(e):
     if e.reply_to_msg_id:
         message = await e.get_reply_message()
@@ -55,6 +57,7 @@ async def update_profile_pic(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.pbio (.+)"))
+@log_exception
 async def update_profile_bio(e):
     bio = e.pattern_match.group(1)
     if len(bio) > 70:
@@ -65,6 +68,7 @@ async def update_profile_bio(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.puname (.+)"))
+@log_exception
 async def change_profile_username(e):
     username = e.pattern_match.group(1)
 
@@ -92,6 +96,7 @@ async def change_profile_username(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="^\.pname (.+)"))
+@log_exception
 async def change_profile_name(e):
     name = e.pattern_match.group(1)
     firstName = name.split("\\n", 1)[0]

@@ -29,6 +29,7 @@ CONFIG_VALUES = [
     "APP_ID         : Your telegram app id from https://my.telegram.org/apps",
     "APP_HASH       : Your telegram app hash from https://my.telegram.org/apps",
     "DB_URI         : Your postgress database url. Leave empty to disable the modules that use it",
+    "DEBUG          : Set True if you want to generate log files from exceptions",
     "BLOCK_PM       : Set to True if you want to block new PMs. New PMs will be deleted and user blocked",
     "NOPM_SPAM      : Set to True if you want to block users that are spamming your PMs.",
     "PROXY_TYPE     : Your proxy type HTTP/SOCKS4/SOCKS5. Leave empty to disable proxy.",
@@ -59,6 +60,7 @@ APP_HASH = os.environ.get("APP_HASH", None)
 SESSION_NAME = os.environ.get("SESSION_NAME", "tg_userbot")
 FORCE_SMS = os.environ.get("FORCE_SMS", False)
 DB_URI = os.environ.get("DB_URI", None)
+DEBUG = os.environ.get("DEBUG", False)
 
 PROXY_TYPE = os.environ.get("PROXY_TYPE", None)
 HOST = os.environ.get("HOST", None)

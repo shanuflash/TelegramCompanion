@@ -2,11 +2,12 @@ import requests
 from telethon import events
 
 from tg_userbot import client
-
+from tg_userbot.utils.decorators import log_exception
 URL = "https://api.github.com/users/"
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"\.github (\w*)"))
+@log_exception
 async def github(e):
 
     request = requests.get(URL + e.pattern_match.group(1))

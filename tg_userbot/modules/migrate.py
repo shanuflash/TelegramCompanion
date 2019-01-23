@@ -4,7 +4,7 @@ from telethon.tl.functions.messages import AddChatUserRequest
 from telethon.tl.types import User
 
 from tg_userbot import client
-
+from tg_userbot.utils.decorators import log_exception
 CHAT_IDS = []
 FAILED_CHATS = []
 FAILED_CHATS_COUNT = 0
@@ -12,6 +12,7 @@ MIGRATED_CHATS_COUNT = 0
 
 
 @client.on(events.NewMessage(outgoing=True, pattern="\.migrate ((?:@)?\w*)?"))
+@log_exception
 async def account_migrate(e):
     global CHAT_IDS
     global FAILED_CHATS

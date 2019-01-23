@@ -7,10 +7,11 @@ from telethon import events
 
 from tg_userbot import (ENABLE_SSH, SSH_HOSTNAME, SSH_KEY, SSH_PASSPHRASE,
                         SSH_PASSWORD, SSH_PORT, SSH_USERNAME, client)
-
+from tg_userbot.utils.decorators import log_exception
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.term (.+)"))
+@log_exception
 async def terminal(e):
 
     cmd = e.pattern_match.group(1)
@@ -65,6 +66,7 @@ async def terminal(e):
                       func=lambda x: ENABLE_SSH,
                       pattern="^\.rterm (.+)")
 )
+@log_exception
 async def ssh_terminal(e):
     cmd = e.pattern_match.group(1)
     OUTPUT = f"**Query:**\n`{cmd}`\n\n**Output:**\n"
@@ -119,6 +121,7 @@ async def ssh_terminal(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.upload (.+)"))
+@log_exception
 async def upload_file(e):
     to_upload = e.pattern_match.group(1)
     chat = await e.get_chat()
@@ -134,6 +137,7 @@ async def upload_file(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.rupload (.+)"))
+@log_exception
 async def ssh_upload_file(e):
     to_upload = e.pattern_match.group(1)
     chat = await e.get_chat()
