@@ -9,3 +9,4 @@ sqlalchemy
 progressbar2
 requests
 asyncssh
+aiohttp

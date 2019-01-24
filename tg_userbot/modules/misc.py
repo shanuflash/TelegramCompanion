@@ -3,7 +3,7 @@ import re
 import time
 
 import platform
-import requests
+import aiohttp
 import telethon
 import zipfile
 import io
@@ -11,7 +11,7 @@ from telethon import events
 from telethon.tl.functions.users import GetFullUserRequest
 
 from tg_userbot import client
-from tg_userbot.modules.rextester.api import CompilerError, Rextester
+from tg_userbot.modules.rextester.api import UnknownLanguage, Rextester
 from tg_userbot.utils.decorators import log_exception
 from tg_userbot.modules.sql import stats_sql as sql
 from telethon.tl.types import User
@@ -22,7 +22,8 @@ from .._version import __version__
 @log_exception
 async def ping(e):
     start_time = time.time()
-    requests.get("https://api.telegram.org")
+    async with aiohttp.ClientSession() as session:
+        await session.get("https://api.telegram.org")
     end_time = time.time()
     ping_time = float(end_time - start_time) * 1000
     await e.edit(f"Ping time was: {ping_time}ms")
@@ -144,8 +145,9 @@ async def rextestercli(e):
         stdin = regex.group(3)
 
         try:
-            regexter = Rextester(language, code, stdin)
-        except CompilerError as exc:
+            rextester = Rextester(language, code, stdin)
+            res = await rextester.exec()
+        except UnknownLanguage as exc:
             await e.edit(str(exc))
             return
 
@@ -153,17 +155,17 @@ async def rextestercli(e):
         output += f"**Language:**\n```{language}```"
         output += f"\n\n**Source:** \n```{code}```"
 
-        if regexter.result:
-            output += f"\n\n**Result:** \n```{regexter.result}```"
+        if res.result:
+            output += f"\n\n**Result:** \n```{res.result}```"
 
-        if regexter.warnings:
-            output += f"\n\n**Warnings:** \n```{regexter.warnings}```\n"
+        if res.warnings:
+            output += f"\n\n**Warnings:** \n```{res.warnings}```\n"
 
-        if regexter.errors:
-            output += f"\n\n**Errors:** \n'```{regexter.errors}```"
+        if res.errors:
+            output += f"\n\n**Errors:** \n'```{res.errors}```"
 
-        if len(regexter.result) > 4096:
-            with io.BytesIO(str.encode(regexter.result)) as out_file:
+        if len(res.result) > 4096:
+            with io.BytesIO(str.encode(res.result)) as out_file:
                 out_file.name = "result.txt"
                 await client.send_file(chat.id, file = out_file)
                 await e.edit(code)
