@@ -8,6 +8,7 @@ from tg_userbot import client, DEBUG
 
 loop = asyncio.get_event_loop()
 
+
 def timer(seconds, run=True):
     """Run a decorated function every x seconds.
 
@@ -35,7 +36,6 @@ def timer(seconds, run=True):
     return scheduler
 
 
-
 def log_to_str(v):
     try:
         return str(v).replace("\n", "\\n")
@@ -61,7 +61,6 @@ def log_exception(func):
 
             if not os.path.exists('logs/'):
                 os.mkdir('logs/')
-
 
             with open(f"logs/{file_name}", "a") as log_file:
                 log_file.write(f"Exception thrown, {type(e)}: {str(e)}\n")

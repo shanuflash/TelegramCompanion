@@ -4,7 +4,8 @@ from tg_userbot.modules.sql import afk_sql as sql
 from tg_userbot import client
 from tg_userbot.utils.decorators import log_exception
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.afk?(.+)"))
+
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.afk?(.+)"))
 @log_exception
 async def afk(e):
     reason = e.pattern_match.group(1)

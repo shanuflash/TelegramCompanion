@@ -12,7 +12,7 @@ from tg_userbot import client
 from tg_userbot.utils.decorators import log_exception
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.cpic"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.cpic"))
 @log_exception
 async def update_profile_pic(e):
     if e.reply:
@@ -56,7 +56,7 @@ async def update_profile_pic(e):
                 os.remove(photo)
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.cabout (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.cabout (.+)"))
 @log_exception
 async def update_profile_bio(e):
     about = e.pattern_match.group(1)
@@ -80,7 +80,7 @@ async def update_profile_bio(e):
                 await e.edit("`The chat wasn't modified`")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.cuname (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.cuname (.+)"))
 @log_exception
 async def change_profile_username(e):
     username = e.pattern_match.group(1)
@@ -121,7 +121,7 @@ async def change_profile_username(e):
                 await e.edit("`The chat or channel wasn't modified`")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.cname (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.cname (.+)"))
 @log_exception
 async def change_profile_name(e):
     title = e.pattern_match.group(1)

@@ -18,7 +18,7 @@ from telethon.tl.types import User
 from .._version import __version__
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.ping"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.ping"))
 @log_exception
 async def ping(e):
     start_time = time.time()
@@ -28,7 +28,7 @@ async def ping(e):
     await e.edit(f"Ping time was: {ping_time}ms")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.version"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.version"))
 @log_exception
 async def version(e):
     bot_version = __version__.public()
@@ -38,7 +38,7 @@ async def version(e):
     await e.edit(f"__Bot Version__ = `{bot_version}`\n\n__Python Version__ = `{python_version}`\n\n__Telethon Version__ = {telethon_version}")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.info"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.info"))
 @log_exception
 async def user_info(e):
     message = e.message
@@ -87,7 +87,7 @@ async def user_info(e):
     )
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.stats"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.stats"))
 @log_exception
 async def show_stats(e):
     stats = sql.get_stats()
@@ -126,7 +126,7 @@ async def show_stats(e):
         await e.edit("`Stats are unavailable `.")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\$"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\$"))
 @log_exception
 async def rextestercli(e):
     stdin = ""
@@ -134,7 +134,7 @@ async def rextestercli(e):
 
     if len(message.split()) > 1:
         regex = re.search(
-            "^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$",
+            r"^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$",
             message,
             re.IGNORECASE,
         )
@@ -163,7 +163,8 @@ async def rextestercli(e):
 
         await e.edit(output)
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.sendlog"))
+
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.sendlog"))
 @log_exception
 async def send_logs(e):
 

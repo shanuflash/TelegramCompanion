@@ -68,7 +68,6 @@ STATS.__table__.create(checkfirst=True)
 GroupsInfo.__table__.create(checkfirst=True)
 
 
-
 def get_stats():
     cursor = SESSION.query(STATS).first()
     try:
@@ -163,13 +162,18 @@ async def GetStats():
                 NumChannel = NumChannel + 1
 
     completed = 0
-    bar = progressbar.ProgressBar(max_value=NumSuper, widget=None, poll_interval=1)
+    bar = progressbar.ProgressBar(
+        max_value=NumSuper,
+        widget=None,
+        poll_interval=1)
     bar.update(completed)
 
     for dialog in dialogs:
         if dialog.is_channel:
             if dialog.is_group:
-                ID1 = utils.get_peer_id(utils.get_input_peer(dialog, allow_self=False))
+                ID1 = utils.get_peer_id(
+                    utils.get_input_peer(
+                        dialog, allow_self=False))
                 strid = str(ID1).replace("-100", "")
                 ID = int(strid)
                 if ID not in CachedSupergroups:
@@ -212,8 +216,10 @@ async def GetStats():
 
     for dialog in dialogs:
         if dialog.is_channel:
-            if dialog.entity.megagroup == True:
-                ID1 = utils.get_peer_id(utils.get_input_peer(dialog, allow_self=False))
+            if dialog.entity.megagroup:
+                ID1 = utils.get_peer_id(
+                    utils.get_input_peer(
+                        dialog, allow_self=False))
                 strid = str(ID1).replace("-100", "")
                 ID = int(strid)
                 try:
@@ -236,7 +242,9 @@ async def GetStats():
     for dialog in dialogs:
         ID = None
         try:
-            ID = utils.get_peer_id(utils.get_input_peer(dialog, allow_self=False))
+            ID = utils.get_peer_id(
+                utils.get_input_peer(
+                    dialog, allow_self=False))
         except Exception:
             ID = UserId
         if dialog.is_channel:
@@ -248,7 +256,7 @@ async def GetStats():
         if ID not in ConvertedGroupsIDs:
             count = await client.get_messages(await client.get_input_entity(dialog))
             if dialog.is_channel:
-                if dialog.entity.megagroup == True:
+                if dialog.entity.megagroup:
                     SupCount = SupCount + count.total
                 else:
                     ChannelCount = ChannelCount + count.total

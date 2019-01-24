@@ -11,7 +11,7 @@ FAILED_CHATS_COUNT = 0
 MIGRATED_CHATS_COUNT = 0
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="\.migrate ((?:@)?\w*)?"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.migrate ((?:@)?\w*)?"))
 @log_exception
 async def account_migrate(e):
     global CHAT_IDS

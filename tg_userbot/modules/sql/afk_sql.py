@@ -3,6 +3,7 @@ import threading
 from sqlalchemy import Boolean, Column, UnicodeText
 from tg_userbot.modules.sql import BASE, SESSION
 
+
 class AFK(BASE):
     __tablename__ = "afk"
     is_afk = Column(Boolean, primary_key=True)

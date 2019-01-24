@@ -14,7 +14,7 @@ from tg_userbot import client
 from tg_userbot.utils.decorators import log_exception
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.ppic"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.ppic"))
 @log_exception
 async def update_profile_pic(e):
     if e.reply_to_msg_id:
@@ -56,7 +56,7 @@ async def update_profile_pic(e):
                 os.remove(photo)
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.pbio (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.pbio (.+)"))
 @log_exception
 async def update_profile_bio(e):
     bio = e.pattern_match.group(1)
@@ -67,7 +67,7 @@ async def update_profile_bio(e):
         await e.edit("`Succesfully changed your bio`")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.puname (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.puname (.+)"))
 @log_exception
 async def change_profile_username(e):
     username = e.pattern_match.group(1)
@@ -95,7 +95,7 @@ async def change_profile_username(e):
             await e.edit(f"`{username} is already taken`")
 
 
-@client.on(events.NewMessage(outgoing=True, pattern="^\.pname (.+)"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.pname (.+)"))
 @log_exception
 async def change_profile_name(e):
     name = e.pattern_match.group(1)

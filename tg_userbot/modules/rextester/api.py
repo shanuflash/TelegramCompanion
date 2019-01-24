@@ -10,7 +10,10 @@ class Rextester:
         if lang not in languages:
             raise CompilerError("Unknown language")
 
-        data = {"LanguageChoice": languages[lang], "Program": code, "Input": stdin}
+        data = {
+            "LanguageChoice": languages[lang],
+            "Program": code,
+            "Input": stdin}
 
         request = requests.post(URL, data=data)
         self.response = request.json()

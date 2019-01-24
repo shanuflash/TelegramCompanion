@@ -9,8 +9,8 @@ import dotenv
 
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
-)
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.DEBUG)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ CONFIG_VALUES = [
     "SSH_PASSWORD   : SSH: (optional) The password to use for client password authentication",
     "SSH_PASSPHRASE : SSH: (optional) The passphrase for your ssh connection.",
     "SSH_KEY        : SSH: (optional) The private key which will be used to authenticate this client",
-    ]
+]
 
 args = parser.parse_args()
 if args.config:
@@ -100,8 +100,17 @@ if PROXY_TYPE:
 
     proxy = (proxy_type, proxy_addr, int(proxy_port), False)
 if USERNAME and PASSWORD:
-    proxy = (proxy_type, proxy_addr, proxy_port, False, proxy_username, proxy_password)
+    proxy = (
+        proxy_type,
+        proxy_addr,
+        proxy_port,
+        False,
+        proxy_username,
+        proxy_password)
 
 client = TelegramClient(
-    SESSION_NAME, APP_ID, APP_HASH, proxy=proxy, app_version=__version__.public()
-)
+    SESSION_NAME,
+    APP_ID,
+    APP_HASH,
+    proxy=proxy,
+    app_version=__version__.public())

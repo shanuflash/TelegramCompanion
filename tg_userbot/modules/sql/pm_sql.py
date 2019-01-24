@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer
 from tg_userbot.modules.sql import BASE, SESSION
 
+
 class PM(BASE):
     __tablename__ = "private_messages"
     chat_id = Column(Integer, primary_key=True)
