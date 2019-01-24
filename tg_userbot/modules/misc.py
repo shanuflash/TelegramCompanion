@@ -131,6 +131,7 @@ async def show_stats(e):
 async def rextestercli(e):
     stdin = ""
     message = e.text
+    chat = await e.get_chat()
 
     if len(message.split()) > 1:
         regex = re.search(
@@ -160,6 +161,13 @@ async def rextestercli(e):
 
         if regexter.errors:
             output += f"\n\n**Errors:** \n'```{regexter.errors}```"
+
+        if len(regexter.result) > 4096:
+            with io.BytesIO(str.encode(regexter.result)) as out_file:
+                out_file.name = "result.txt"
+                await client.send_file(chat.id, file = out_file)
+                await e.edit(code)
+            return
 
         await e.edit(output)
 
