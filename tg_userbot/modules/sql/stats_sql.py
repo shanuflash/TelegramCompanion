@@ -96,7 +96,7 @@ def get_stats():
 FirstRun = True
 
 
-@timer(seconds=STATS_TIMER, min_value=1800, run=RUN_STATS)
+@timer(STATS_TIMER, run=RUN_STATS)
 @log_exception
 async def GetStats():
     global FirstRun

@@ -3,11 +3,12 @@ from datetime import datetime
 import sys
 import os
 import inspect
-import functools
-from tg_userbot import client, LOGGER, DEBUG
+from tg_userbot import client, DEBUG
 
 
-def timer(seconds=3600, min_value=None, max_value=None, run=True):
+loop = asyncio.get_event_loop()
+
+def timer(seconds, run=True):
     """Run a decorated function every x seconds.
 
     The decorated function must be added as a task in the main file (see main for examples)
@@ -20,26 +21,14 @@ def timer(seconds=3600, min_value=None, max_value=None, run=True):
 
     def scheduler(fcn):
         async def wrapper():
-            while not client.is_connected():
-                await asyncio.sleep(1)
             if run:
-                if min_value:
-                    if seconds < min_value:
-                        LOGGER.error(
-                            f"The timer can't be lower than {seconds} seconds"
-                        )
-                        quit(1)
-                if max_value:
-                    if seconds > max_value:
-                        LOGGER.error(
-                            f"The timer can't be higher than {seconds} seconds"
-                        )
-                        quit(1)
-                while 1:
-                    asyncio.ensure_future(fcn())
+                while not client.is_connected():
+                    await asyncio.sleep(1)
+                while True:
+                    await fcn()
                     await asyncio.sleep(seconds)
-            else:
-                pass
+        loop.create_task(wrapper())
+        return fcn
 
         return wrapper
 
