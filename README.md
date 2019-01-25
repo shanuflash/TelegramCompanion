@@ -4,14 +4,13 @@
 
 ## Table of Contents
 
-- [Instalation](#Instalation)
+- [Installation](#Installation)
 - [Setup](#Setup)
 - [Features](#Features)
-- [Contribuiting](#Contribuiting)
-- [Suport](#Support)
+- [Contributing](#Contributing)
+- [License](#License)
 
-
-## Instalation
+## Installation
 
 - Install python3.7 and python3.7-dev. python3.6 and python3-dev works too:
 
@@ -22,15 +21,15 @@ sudo apt install python3.7 python3.7-dev
 ![Python Installation](/src/python.gif?raw=true)
 
 
-- Clone the repo:
+- Clone this repo by running:
 
-```
+```shell
 git clone https://github.com/nitanmarcel/Tg-UserBot
 ```
 
-- Install the requirements using pip3
+- Install all the requirements using pip3
 
-```
+```shell
 pip3 install -r requirements.txt
 ```
 
@@ -40,7 +39,7 @@ pip3 install -r requirements.txt
 
 # Setup
 
-#### Before starting the bot you have to configure it.
+#### Before starting the bot you have to configure it as per your requirements.
 > - Create a config.env file. Follow the example from sample.config.env.
 > - Write the next lines in the config
 > - You can always display the congiguration help with `python3 -m tg_userbot --config`
@@ -132,10 +131,12 @@ pip3 install -r requirements.txt
 
    > `ada`, `asm`, `bash`, `brainfuck`, `c`, `c#`, `c++`, `c_clang`, `c_gcc`, `clang`, `clang++`, `clangplusplus`, `clisp`, `common_lisp`, `cplusplus`, `cplusplus_clang`, `cplusplus_gcc`, `cpp`, `cpp_clang`, `cpp_gcc`, `csharp`, `d`, `elixir`, `erlang`, `f#`, `fortran`, `fpc`, `fsharp`, `g++`, `gcc`, `go`, `golang`, `haskell`, `java`, `javascript`, `js`, `kotlin`, `lisp`, `lua`, `msvc`, `mysql`, `nasm`, `node`, `objc`, `objective_c`, `ocaml`, `oracle`, `pas`, `pascal`, `perl`, `php`, `postgresql`, `prolog`, `py2`, `py3`, `python`, `python2`, `python3`, `r`, `ruby`, `scala`, `scheme`, `sql_server`, `swift`, `tcl`, `v8`, `vb`, `vb.net`, `vc++`, `visual_basic_dotnet`, `visual_c`, `visual_cplusplus`, `visual_cpp`
 
-## Contribuiting
+## Contributing
 
-### To Do
+Feel free to open an issue (or even better, send a Pull Request) for expanding this list. Contributions are very welcome :smiley:
 
-## Support
+Note that a PR needs to reach a certain level of engagement before it gets merged. This criteria is kept to maintain the quality of the bot.
 
-### To Do
+## License
+
+This code is licensed under [GPL v3](LICENSE).
