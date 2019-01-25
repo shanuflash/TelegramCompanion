@@ -33,6 +33,7 @@ CONFIG_VALUES = [
     "APP_HASH       : Your telegram app hash from https://my.telegram.org/apps",
     "DB_URI         : Your postgress database url. Leave empty to disable the modules that use it",
     "DEBUG          : Set True if you want to generate log files from exceptions",
+    "STATS_TIMER    : (optional) Update stats every x seconds. Default = 3600 seconds. Set to 0 to disable",
     "BLOCK_PM       : Set to True if you want to block new PMs. New PMs will be deleted and user blocked",
     "NOPM_SPAM      : Set to True if you want to block users that are spamming your PMs.",
     "PROXY_TYPE     : Your proxy type HTTP/SOCKS4/SOCKS5. Leave empty to disable proxy.",
@@ -75,8 +76,7 @@ PASSWORD = os.environ.get("PASSWORD", None)
 
 BLOCK_PM = os.environ.get("BLOCK_PM", False)
 NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
-RUN_STATS = os.environ.get("STATS", False)
-STATS_TIMER = os.environ.get("STATS_TIMER", 3600)
+STATS_TIMER = int(os.environ.get("STATS_TIMER", 3600))
 
 ENABLE_SSH = os.environ.get('ENABLE_SSH', False)
 SSH_HOSTNAME = os.environ.get('SSH_HOSTNAME', '::1')

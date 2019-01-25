@@ -9,31 +9,34 @@ from tg_userbot import client, DEBUG
 loop = asyncio.get_event_loop()
 
 
-def timer(seconds, run=True):
-    """Run a decorated function every x seconds.
+def timer(seconds):
+    """
+    A decorator that runs a decorated function every x seconds.
 
-    The decorated function must be added as a task in the main file (see main for examples)
+    Args:
 
-    seconds: [int] How many seconds to wait before re-executing the function.
-    min_value: [int] The low limit of seconds allowed
-    max_value: [int] The max limit of seconds allowed
-    run: [bool] Default is True, set to False to stop the function from activating. [Usefull to use as a config var]
+    seconds (int): Updates the function every given second
     """
 
-    def scheduler(fcn):
+    def decorator(fcn):
         async def wrapper():
-            if run:
-                while not client.is_connected():
-                    await asyncio.sleep(1)
-                while True:
-                    await fcn()
-                    await asyncio.sleep(seconds)
+
+            if seconds == 0:
+                return
+            while not client.is_connected():
+                await asyncio.sleep(1)
+            while True:
+                await fcn()
+                await asyncio.sleep(seconds)
         loop.create_task(wrapper())
+
+        if seconds == 0:
+            return
+
+        print(seconds)
         return fcn
-
         return wrapper
-
-    return scheduler
+    return decorator
 
 
 def log_to_str(v):

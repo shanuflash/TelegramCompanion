@@ -52,9 +52,7 @@ pip3 install -r requirements.txt
 >
 > - `SESSION_NAME` = Custom session name. Leave empty to use the default session name
 >
-> - `STATS` = Set to False if you want to disable stats gathering",
->
-> - `STATS_TIMER` = Set the stats refresh time
+> - `STATS_TIMER` = Set the stats update time in seconds. Set it to 0 to completly disable stats.
 >
 > - `FORCE_SMS` = Set true to get the security code though SMS
 >

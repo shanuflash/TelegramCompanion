@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, UnicodeText
 from telethon import utils
 from telethon.tl.functions.channels import GetFullChannelRequest
 
-from tg_userbot import LOGGER, RUN_STATS, STATS_TIMER, client
+from tg_userbot import LOGGER, STATS_TIMER, client
 from tg_userbot.modules.sql import BASE, SESSION
 from tg_userbot.utils.decorators import timer, log_exception
 
@@ -95,7 +95,7 @@ def get_stats():
 FirstRun = True
 
 
-@timer(STATS_TIMER, run=RUN_STATS)
+@timer(STATS_TIMER)
 @log_exception
 async def GetStats():
     global FirstRun
