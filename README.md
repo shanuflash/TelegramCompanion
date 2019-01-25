@@ -133,7 +133,7 @@ pip3 install -r requirements.txt
 
 ## Contributing
 
-Feel free to open an issue (or even better, send a Pull Request) for expanding this list. Contributions are very welcome :smiley:
+Feel free to open an issue (or even better, send a **Pull Request**) for improving the bot's code. **Contributions** are very welcome !! :smiley:
 
 Note that a PR needs to reach a certain level of engagement before it gets merged. This criteria is kept to maintain the quality of the bot.
 
