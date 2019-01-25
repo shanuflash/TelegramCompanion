@@ -24,7 +24,7 @@ sudo apt install python3.7 python3.7-dev
 - Clone this repo by running:
 
 ```shell
-git clone https://github.com/nitanmarcel/Tg-UserBot
+git clone https://github.com/Yash-Garg/Tg-UserBot
 ```
 
 - Install all the requirements using pip3
