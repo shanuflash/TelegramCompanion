@@ -1,6 +1,7 @@
 from ._version import __version__
 from telethon import TelegramClient
 from argparse import ArgumentParser
+from alchemysession import AlchemySessionContainer
 import socks
 import sys
 import os
@@ -8,11 +9,13 @@ import logging
 import dotenv
 
 
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.DEBUG)
 
 LOGGER = logging.getLogger(__name__)
+
 
 if sys.version_info[0] < 3 or sys.version_info[1] < 6:
     LOGGER.error(
@@ -52,6 +55,8 @@ args = parser.parse_args()
 if args.config:
     print("\n".join(CONFIG_VALUES))
     quit(1)
+
+
 
 dotenv.load_dotenv("config.env")
 
@@ -108,8 +113,12 @@ if USERNAME and PASSWORD:
         proxy_username,
         proxy_password)
 
+
+container = AlchemySessionContainer(DB_URI)
+session = container.new_session(SESSION_NAME)
+
 client = TelegramClient(
-    SESSION_NAME,
+    session,
     APP_ID,
     APP_HASH,
     proxy=proxy,
