@@ -116,6 +116,8 @@ pip3 install -r requirements.txt
 >
 > - `.github` `<github-username>` - Get the info and repositories of any github user
 >
+> - `.exec` `code` - Execute a python code in your local pc
+> 
 > - `.term` `<command>` - Execute bash commands
 >
 > - `.rterm` `<command>` - Execute bash commands on a ssh server

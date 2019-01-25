@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import sys
 
 import platform
 import aiohttp
@@ -200,3 +201,47 @@ async def send_logs(e):
                 await e.delete()
     else:
         await e.edit("There are no logs to send")
+
+@client.on(events.NewMessage(outgoing=True, pattern=r"^\.exec\s+([\s\S]+)"))
+async def py_execute(e):
+    chat = await e.get_chat()
+    code = e.pattern_match.group(1)
+
+    old_stdout = sys.stdout
+    old_stderr = sys.stderr
+    redirected_output = sys.stdout = io.StringIO()
+    redirected_error = sys.stderr = io.StringIO()
+
+
+    stdout, stderr, exc = None, None, None
+
+    try:
+        exec(code)
+    except Exception:
+        import traceback
+        exc = traceback.format_exc()
+
+    stdout = redirected_output.getvalue()
+    stderr = redirected_error.getvalue()
+
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
+
+    if exc:
+        await e.edit(f"**Query**:\n`{code}`\n\n **Exception:**\n`{exc}`")
+        return
+
+    if stderr:
+        await e.edit(f"**Query**:\n`{code}`\n\n **Error:**\n`{stderr}`")
+        return
+
+    if stdout:
+        if len(stdout) > 4096:
+            with io.BytesIO(str.encode(stdout)) as out_file:
+                out_file.name = "result.txt"
+                await client.send_file(chat.id, file=out_file, caption=f"'{code}'")
+                return
+
+        await e.edit(f"**Query**:\n`{code}`\n\n **Result:**\n`{stdout}`")
+    else:
+        await e.edit("Did you forget to output something?")
