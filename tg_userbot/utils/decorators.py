@@ -33,7 +33,6 @@ def timer(seconds):
         if seconds == 0:
             return
 
-        print(seconds)
         return fcn
         return wrapper
     return decorator
