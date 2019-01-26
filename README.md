@@ -1,6 +1,6 @@
-# Tg-UserBot
+# TelegramCompanion
 
-> Tg-UserBot is simple userbot for Telegram to make your time spent on telegram more enjoyable.
+> TelegramCompanion is simple userbot for Telegram to make your time spent on telegram more enjoyable.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ sudo apt install python3.7 python3.7-dev
 -   Clone this repo by running:
 
 ```shell
-git clone https://github.com/Yash-Garg/Tg-UserBot
+git clone https://github.com/nitanmarcel/TelegramCompanion
 ```
 
 -   Install all the requirements using pip3
@@ -42,7 +42,7 @@ pip3 install -r requirements.txt
 #### Before starting the bot you have to configure it as per your requirements.
 > -   Create a config.env file. Follow the example from sample.config.env.
 > -   Write the next lines in the config
-> -   You can always display the congiguration help with `python3 -m tg_userbot --config`
+> -   You can always display the congiguration help with `python3 -m tg_companion --config`
 
 #### The available config values are:
 

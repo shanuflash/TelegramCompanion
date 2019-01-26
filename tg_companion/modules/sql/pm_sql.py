@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer
-from tg_userbot.modules.sql import BASE, SESSION
+
+from tg_companion.modules.sql import BASE, SESSION
 
 
 class PM(BASE):

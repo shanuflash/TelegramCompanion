@@ -8,12 +8,11 @@ from telethon.tl.functions.channels import (EditAboutRequest, EditPhotoRequest,
                                             UpdateUsernameRequest)
 from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
 
-from tg_userbot import client
-from tg_userbot.utils.decorators import log_exception
+from tg_companion.tgclient import client
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.cpic"))
-@log_exception
+@client.log_exception
 async def update_profile_pic(e):
     if e.reply:
         message = await e.get_reply_message()
@@ -57,7 +56,7 @@ async def update_profile_pic(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.cabout (.+)"))
-@log_exception
+@client.log_exception
 async def update_profile_bio(e):
     about = e.pattern_match.group(1)
     chat = await e.get_chat()
@@ -81,7 +80,7 @@ async def update_profile_bio(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.cuname (.+)"))
-@log_exception
+@client.log_exception
 async def change_profile_username(e):
     username = e.pattern_match.group(1)
     chat = await e.get_chat()
@@ -122,7 +121,7 @@ async def change_profile_username(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.cname (.+)"))
-@log_exception
+@client.log_exception
 async def change_profile_name(e):
     title = e.pattern_match.group(1)
     chat = await e.get_chat()

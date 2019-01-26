@@ -1,12 +1,11 @@
 from telethon import events
 
-from tg_userbot.modules.sql import afk_sql as sql
-from tg_userbot import client
-from tg_userbot.utils.decorators import log_exception
+from tg_companion.modules.sql import afk_sql as sql
+from tg_companion.tgclient import client
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.afk?(.+)"))
-@log_exception
+@client.log_exception
 async def afk(e):
     reason = e.pattern_match.group(1)
     if len(reason) <= 2:
@@ -17,7 +16,7 @@ async def afk(e):
 
 
 @client.on(events.NewMessage(outgoing=True))
-@log_exception
+@client.log_exception
 async def no_afk(e):
     chat = await e.get_chat()
     if ".afk" not in e.text:
@@ -27,7 +26,7 @@ async def no_afk(e):
 
 
 @client.on(events.NewMessage(incoming=True))
-@log_exception
+@client.log_exception
 async def reply_afk(e):
     chat = await e.get_chat()
     if e.mentioned or e.is_private:

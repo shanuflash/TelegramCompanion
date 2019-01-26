@@ -1,4 +1,4 @@
-from tg_userbot import LOGGER
+from tg_companion import LOGGER
 
 
 def __list_modules__():

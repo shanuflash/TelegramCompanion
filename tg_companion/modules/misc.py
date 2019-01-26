@@ -1,26 +1,26 @@
+import io
 import os
-import re
-import time
-import sys
-
 import platform
+import re
+import sys
+import time
+import zipfile
+
 import aiohttp
 import telethon
-import zipfile
-import io
 from telethon import events
 from telethon.tl.functions.users import GetFullUserRequest
-
-from tg_userbot import client
-from tg_userbot.modules.rextester.api import UnknownLanguage, Rextester
-from tg_userbot.utils.decorators import log_exception
-from tg_userbot.modules.sql import stats_sql as sql
 from telethon.tl.types import User
+
+from tg_companion.modules.rextester.api import Rextester, UnknownLanguage
+from tg_companion.modules.sql import stats_sql as sql
+from tg_companion.tgclient import client
+
 from .._version import __version__
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.ping"))
-@log_exception
+@client.log_exception
 async def ping(e):
     start_time = time.time()
     async with aiohttp.ClientSession() as session:
@@ -31,7 +31,7 @@ async def ping(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.version"))
-@log_exception
+@client.log_exception
 async def version(e):
     bot_version = __version__.public()
     python_version = platform.python_version()
@@ -41,7 +41,7 @@ async def version(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.info"))
-@log_exception
+@client.log_exception
 async def user_info(e):
     message = e.message
     user = await e.get_sender()
@@ -90,7 +90,7 @@ async def user_info(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.stats"))
-@log_exception
+@client.log_exception
 async def show_stats(e):
     stats = sql.get_stats()
     if stats:
@@ -129,7 +129,7 @@ async def show_stats(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\$"))
-@log_exception
+@client.log_exception
 async def rextestercli(e):
     stdin = ""
     message = e.text
@@ -168,7 +168,7 @@ async def rextestercli(e):
         if len(res.result) > 4096:
             with io.BytesIO(str.encode(res.result)) as out_file:
                 out_file.name = "result.txt"
-                await client.send_file(chat.id, file = out_file)
+                await client.send_file(chat.id, file=out_file)
                 await e.edit(code)
             return
 
@@ -176,7 +176,7 @@ async def rextestercli(e):
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.sendlog"))
-@log_exception
+@client.log_exception
 async def send_logs(e):
 
     if os.path.exists("logs/"):
@@ -202,6 +202,7 @@ async def send_logs(e):
     else:
         await e.edit("There are no logs to send")
 
+
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.exec\s+([\s\S]+)"))
 async def py_execute(e):
     chat = await e.get_chat()
@@ -211,7 +212,6 @@ async def py_execute(e):
     old_stderr = sys.stderr
     redirected_output = sys.stdout = io.StringIO()
     redirected_error = sys.stderr = io.StringIO()
-
 
     stdout, stderr, exc = None, None, None
 

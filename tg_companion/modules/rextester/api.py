@@ -2,7 +2,7 @@ import asyncio
 
 import aiohttp
 
-from tg_userbot.modules.rextester.langs import languages
+from tg_companion.modules.rextester.langs import languages
 
 
 class Rextester(object):

@@ -1,7 +1,4 @@
-from ._version import __version__
-from telethon import TelegramClient
 from argparse import ArgumentParser
-from alchemysession import AlchemySessionContainer
 import socks
 import sys
 import os
@@ -9,10 +6,9 @@ import logging
 import dotenv
 
 
-
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.DEBUG)
+    level=logging.INFO)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -42,7 +38,6 @@ CONFIG_VALUES = [
     "USERNAME       : The username of the used proxy. (If any)",
     "PASSWORD       : The password of the used proxy. (If any)",
     "SESSION_NAME   : Custom session name. Leave empty to use the default session name",
-    "FORCE_SMS      : Set true to get the security code though SMS ",
     "ENABLE_SSH     : Set True if you want to execute/upload from a ssh server",
     "SSH_HOSTNAME   : SSH: (optional) The hostname or address to connect to.",
     "SSH_PORT       : SSH: (optional) The hostname or address to connect to.",
@@ -58,13 +53,11 @@ if args.config:
     quit(1)
 
 
-
 dotenv.load_dotenv("config.env")
 
 APP_ID = os.environ.get("APP_ID", None)
 APP_HASH = os.environ.get("APP_HASH", None)
-SESSION_NAME = os.environ.get("SESSION_NAME", "tg_userbot")
-FORCE_SMS = os.environ.get("FORCE_SMS", False)
+SESSION_NAME = os.environ.get("SESSION_NAME", "tg_companion")
 DB_URI = os.environ.get("DB_URI", None)
 DEBUG = os.environ.get("DEBUG", False)
 
@@ -86,7 +79,6 @@ SSH_PASSWORD = os.environ.get('SSH_PASSWORD', None)
 SSH_PASSPHRASE = os.environ.get('SSH_PASSPHRASE', None)
 SSH_KEY = os.environ.get('SSH_KEY', None)
 
-# Proxy Settings
 proxy = None
 proxy_type = None
 proxy_addr = HOST
@@ -112,14 +104,3 @@ if USERNAME and PASSWORD:
         False,
         proxy_username,
         proxy_password)
-
-
-container = AlchemySessionContainer(DB_URI)
-session = container.new_session(SESSION_NAME)
-
-client = TelegramClient(
-    session,
-    APP_ID,
-    APP_HASH,
-    proxy=proxy,
-    app_version=__version__.public())

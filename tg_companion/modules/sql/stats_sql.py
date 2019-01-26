@@ -5,9 +5,9 @@ from sqlalchemy import Column, Integer, UnicodeText
 from telethon import utils
 from telethon.tl.functions.channels import GetFullChannelRequest
 
-from tg_userbot import LOGGER, STATS_TIMER, client
-from tg_userbot.modules.sql import BASE, SESSION
-from tg_userbot.utils.decorators import timer, log_exception
+from tg_companion import LOGGER, STATS_TIMER
+from tg_companion.modules.sql import BASE, SESSION
+from tg_companion.tgclient import client
 
 
 class STATS(BASE):
@@ -95,8 +95,8 @@ def get_stats():
 FirstRun = True
 
 
-@timer(STATS_TIMER)
-@log_exception
+@client.timer(STATS_TIMER)
+@client.log_exception
 async def GetStats():
     global FirstRun
 
@@ -139,7 +139,7 @@ async def GetStats():
         SESSION.close()
 
     UserId = await client.get_me(input_peer=True)
-    UserId = UserId.id
+    UserId = UserId.user_id
 
     dialogs = await client.get_dialogs(limit=None)
 

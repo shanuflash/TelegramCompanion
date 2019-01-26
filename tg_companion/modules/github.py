@@ -1,13 +1,11 @@
 import aiohttp
 from telethon import events
 
-from tg_userbot import client
-from tg_userbot.utils.decorators import log_exception
-
+from tg_companion.tgclient import client
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.github (\w*)"))
-@log_exception
+@client.log_exception
 async def github(e):
 
     URL = f"https://api.github.com/users/{e.pattern_match.group(1)}"
@@ -46,7 +44,6 @@ async def github(e):
                     return
 
                 result = await request.json()
-
 
                 REPLY += "\nRepos: \n\n"
 
