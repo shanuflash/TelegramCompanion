@@ -112,7 +112,6 @@ async def GetStats():
     NumBot = 0
     NumChat = 0
     NumSuper = 0
-    UserId = None
 
     if FirstRun:
         LOGGER.info(
@@ -124,7 +123,7 @@ async def GetStats():
                 "Because this is your first time running this, the .stats command won't work until this process isn't over"
             )
     else:
-        LOGGER.info("Updating Stats.")
+        LOGGER.info("Updating Stats:")
 
     UpdateTime = time.strftime("%c")
     CachedSupergroups = []
@@ -139,7 +138,7 @@ async def GetStats():
     finally:
         SESSION.close()
 
-    UserId = await client.get_me()
+    UserId = await client.get_me(input_peer=True)
     UserId = UserId.id
 
     dialogs = await client.get_dialogs(limit=None)
@@ -201,7 +200,6 @@ async def GetStats():
     LookIds = []
 
     for dialog in dialogs:
-        ID = None
         try:
             ID = await utils.get_peer(dialog, allow_self=False)
         except Exception:
@@ -237,10 +235,9 @@ async def GetStats():
                     SESSION.close()
 
     bar.finish()
-    LOGGER.info("Counting your chats:")
+    LOGGER.info("Counting your chats..")
 
     for dialog in dialogs:
-        ID = None
         try:
             ID = utils.get_peer_id(
                 utils.get_input_peer(

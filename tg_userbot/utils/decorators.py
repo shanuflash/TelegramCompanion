@@ -20,20 +20,17 @@ def timer(seconds):
 
     def decorator(fcn):
         async def wrapper():
-
-            if seconds == 0:
-                return
             while not client.is_connected():
                 await asyncio.sleep(1)
             while True:
+                if int(seconds) == 0:
+                    break
                 await fcn()
                 await asyncio.sleep(seconds)
         loop.create_task(wrapper())
 
-        if seconds == 0:
-            return
 
-        return fcn
+
         return wrapper
     return decorator
 
