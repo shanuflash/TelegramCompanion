@@ -179,28 +179,15 @@ async def rextestercli(e):
 @client.log_exception
 async def send_logs(e):
 
-    if os.path.exists("logs/"):
+    files_in_dir = os.listdir("logs/")
+    chat = await e.get_chat()
 
-        files_in_dir = os.listdir("logs/")
-        chat = await e.get_chat()
+    if len(files_in_dir) == 1:
+        print(files_in_dir[0])
+        await client.upload_from_disk(e, f"logs/{files_in_dir[0]}")
+        return
 
-        if len(files_in_dir) == 1:
-            print(files_in_dir[0])
-            await client.send_file(chat.id, file=f"logs/{files_in_dir[0]}", allow_cache=False)
-            await e.delete()
-            return
-
-        elif len(files_in_dir) > 1:
-            with io.BytesIO() as memzip:
-                with zipfile.ZipFile(memzip, mode="w") as zf:
-                    for logfile in files_in_dir:
-                        zf.write(f"logs/{logfile}")
-                memzip.seek(0)
-                memzip.name = "Logs.zip"
-                await client.send_file(chat.id, file=memzip, allow_cache=False)
-                await e.delete()
-    else:
-        await e.edit("There are no logs to send")
+    await client.upload_from_disk(e, "logs/")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.exec\s+([\s\S]+)"))
