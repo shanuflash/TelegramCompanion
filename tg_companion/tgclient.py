@@ -101,7 +101,7 @@ class CompanionClient(TelegramClient):
                         Folder Name:__ {d_name}
                         __Size__: {d_size} bytes
                     """)
-                    await client.send_file(event.chat_id, file=memzip, allow_cache=None)
+                    await client.send_file(event.chat_id, file=memzip, allow_cache=None, progress_callback=None)
                     await event.delete()
             except FileNotFoundError:
                 await event.edit(f"`{path}` doesn't exist.")
