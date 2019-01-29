@@ -73,7 +73,7 @@ class CompanionClient(TelegramClient):
             await event.edit(
             f"""
                 **Uploading**:
-                __File Name:__ `{f_name}`
+                __File Name:__ {f_name}
                 __Size__: {f_size} bytes
             """)
 
@@ -98,8 +98,8 @@ class CompanionClient(TelegramClient):
                     await event.edit(
                     f"""
                         **Uploading**:
-                        Folder Name:__ `{d_name}`
-                        __Size__: `{d_size}` bytes
+                        Folder Name:__ {d_name}
+                        __Size__: {d_size} bytes
                     """)
                     await client.send_file(event.chat_id, file=memzip, allow_cache=None)
                     await event.delete()
