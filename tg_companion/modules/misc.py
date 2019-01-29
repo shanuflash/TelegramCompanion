@@ -89,43 +89,7 @@ async def user_info(e):
     )
 
 
-@client.on(events.NewMessage(outgoing=True, pattern=r"^\.stats"))
-@client.log_exception
-async def show_stats(e):
-    stats = sql.get_stats()
-    if stats:
-        updatetime, totaldialogs, usercount, channelcount, supcount, convertedgroups, numchannel, numuser, numdeleted, numbot, numchat, numsuper = (
-            stats
-        )
 
-        if convertedgroups != 0:
-            if convertedgroups != numsuper:
-                convertedgroups = convertedgroups
-            else:
-                convertedgroups = "all"
-        else:
-            convertedgroups = ""
-
-        REPLY = f"""
-
-    **\nMESSAGES COUNTS:**
-    Normal groups and chats: `{usercount}`
-    Channels: `{channelcount}`
-    Supergroups: `{supcount}`
-    TOTAL MESSAGES: `{totaldialogs}`
-
-    **\nCHAT COUNTS:**
-    Number of Channels: `{numchannel}`
-    Number of Supergroups: `{numsuper}` from where `{convertedgroups}` of them converted from normal groups.
-    Number of Normal groups: `{numchat}`
-    Number of Private conversations: `{numuser}` from where `{numdeleted}` are now Deleted Accounts.
-    Number of Bot conversations:  `{numbot}`
-    Last Update Time :  `{updatetime} `
-    """
-
-        await e.edit(REPLY)
-    else:
-        await e.edit("`Stats are unavailable `.")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\$"))
