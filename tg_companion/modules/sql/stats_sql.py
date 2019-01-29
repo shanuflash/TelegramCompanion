@@ -95,7 +95,7 @@ def get_stats():
 FirstRun = True
 
 
-@client.timer(STATS_TIMER)
+@client.on_timer(STATS_TIMER)
 @client.log_exception
 async def GetStats():
     global FirstRun
