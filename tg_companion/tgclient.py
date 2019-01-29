@@ -1,16 +1,20 @@
 import asyncio
 import inspect
 import os
+import io
 import sys
+import zipfile
 from datetime import datetime
 
 from alchemysession import AlchemySessionContainer
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
+from telethon.tl import types
 
 from tg_companion import APP_HASH, APP_ID, DB_URI, DEBUG, SESSION_NAME, proxy
 from tg_companion._version import __version__
 from getpass import getpass
+
 
 loop = asyncio.get_event_loop()
 
@@ -62,7 +66,49 @@ class CompanionClient(TelegramClient):
                         self.sign_in(password=password))
         print("Connected!!")
 
-    def timer(self, seconds):
+    async def upload_from_disk(self, event, path, caption=None, force_document=False, use_cache=None, reply_to=None):
+        if os.path.isfile(path):
+            f_name = os.path.basename(path)
+            f_size = os.path.getsize(f_name)
+            await event.edit(
+            f"""
+                **Uploading**:
+                __File Name:__ `{f_name}`
+                __Size__: {f_size} bytes
+            """)
+
+            await self.send_file(event.chat_id, path, file_name=f_name,
+                                force_document=force_document, reply_to=reply_to, progress_callback=None)
+            await event.edit()
+
+        elif os.path.isdir(path):
+            d_name = os.path.dirname(path)
+            try:
+                with io.BytesIO() as memzip:
+                    with zipfile.ZipFile(memzip, mode="w") as zf:
+                        d_size = 0
+                        await event.edit("Processing ZipFile from folder")
+                        for file in os.listdir(path):
+                            zf.write(f"{path}{file}")
+                            d_size += os.path.getsize(f"{path}{file}")
+                    memzip.name = f"{d_name}.zip"
+                    memzip.seek(0)
+
+
+                    await event.edit(
+                    f"""
+                        **Uploading**:
+                        Folder Name:__ `{d_name}`
+                        __Size__: `{d_size}` bytes
+                    """)
+                    await client.send_file(event.chat_id, file=memzip, allow_cache=None)
+                    await event.delete()
+            except FileNotFoundError:
+                await event.edit(f"`{path}` doesn't exist.")
+        else:
+            await event.edit(f"{path} doesn't exist.")
+
+    def on_timer(self, seconds):
         """
         A decorator that runs a decorated function every x seconds.
 

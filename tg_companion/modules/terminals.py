@@ -124,16 +124,8 @@ async def ssh_terminal(e):
 @client.log_exception
 async def upload_file(e):
     to_upload = e.pattern_match.group(1)
-    chat = await e.get_chat()
+    await client.upload_from_disk(e, to_upload, force_document=True)
 
-    if os.path.exists(to_upload):
-        try:
-            await client.send_file(chat.id, file=to_upload)
-            await e.delete()
-        except Exception:
-            await e.edit(f"__Upload Failed__: {to_upload}")
-    else:
-        await e.edit(f"__File Not Found__: `{to_upload}`")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.rupload (.+)"))
@@ -158,12 +150,8 @@ async def ssh_upload_file(e):
                 async with conn.start_sftp_client() as ftp:
                     await e.edit("`Downloading...`")
                     await ftp.get(to_upload, to_upload)
-                    await e.edit("`Uploading...`")
-                    try:
-                        await client.send_file(chat.id, file=to_upload)
-                    except Exception as exc:
-                        await e.edit(f"__Upload Failed__: {to_upload}")
+                    await client.upload_from_disk(e, to_upload, force_document=True)
+
                 os.remove(to_upload)
-                await e.delete()
             else:
                 await e.edit(f"__File Not Found__: `{to_upload}`")
