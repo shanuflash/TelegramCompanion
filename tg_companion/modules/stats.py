@@ -4,7 +4,6 @@ from telethon import events
 from telethon import utils
 from telethon.tl.functions.channels import GetFullChannelRequest
 import sqlalchemy as db
-from sqlalchemy import exc
 
 import time
 import progressbar
@@ -14,35 +13,35 @@ engine = db.create_engine(DB_URI)
 metadata = db.MetaData()
 
 stats_tbl = db.Table("stats", metadata,
-                        db.Column("updatetime", db.String()),
+                     db.Column("updatetime", db.String(), primary_key=True),
 
-                        db.Column("totaldialogs", db.Integer()),
+                     db.Column("totaldialogs", db.Integer()),
 
-                        db.Column("usercount", db.Integer()),
+                     db.Column("usercount", db.Integer()),
 
-                        db.Column("channelcount", db.Integer()),
+                     db.Column("channelcount", db.Integer()),
 
-                        db.Column("supcount", db.Integer()),
+                     db.Column("supcount", db.Integer()),
 
-                        db.Column("convertedgroups", db.Integer()),
+                     db.Column("convertedgroups", db.Integer()),
 
-                        db.Column("numchannel", db.Integer()),
+                     db.Column("numchannel", db.Integer()),
 
-                        db.Column("numuser", db.Integer()),
+                     db.Column("numuser", db.Integer()),
 
-                        db.Column("numdeleted", db.Integer()),
+                     db.Column("numdeleted", db.Integer()),
 
-                        db.Column("numbot", db.Integer()),
+                     db.Column("numbot", db.Integer()),
 
-                        db.Column("numchat", db.Integer()),
-                        db.Column("numsuper", db.Integer()),
-                        )
+                     db.Column("numchat", db.Integer()),
+                     db.Column("numsuper", db.Integer()),
+                     )
+
 GroupsInfo_tbl = db.Table("groups_info", metadata,
-                        db.Column("supergroupid", db.Integer()),
-                        db.Column("oldgroupid", db.Integer()))
+                          db.Column("supergroupid", db.Integer()),
+                          db.Column("oldgroupid", db.Integer()))
 
 FirstRun = None
-
 
 
 @client.on_timer(STATS_TIMER)
@@ -63,17 +62,17 @@ async def GetStats():
     NumChat = 0
     NumSuper = 0
 
-    last_update_time = None
+    FirstTimeRunning = None
 
-    with engine.connect() as connection:
-        query = db.select([stats_tbl.columns.updatetime])
-        last_update_time = connection.execute(query)
-        if not last_update_time:
-            connection = engine.connect()
-            metadata.create_all(stats_tbl)
-            metadata.create_all(GroupsInfo_tbl)
+    UpdateTime = time.strftime("%c")
 
-
+    connection = engine.connect()
+    if not engine.dialect.has_table(engine, stats_tbl):
+        metadata.create_all(
+            bind=engine, tables=[
+                stats_tbl, GroupsInfo_tbl])
+        FirstTimeRunning = True
+    connection.close()
 
     if FirstRun:
         print(
@@ -81,7 +80,7 @@ async def GetStats():
         )
         print("You can disable this in the config.env file")
 
-        if not last_update_time:
+        if FirstTimeRunning:
             print(
                 "Because this is your first time running this, the .stats command won't work until this process isn't over"
             )
@@ -91,15 +90,13 @@ async def GetStats():
 
     CachedSupergroups = []
 
-    if last_update_time:
-        with engine.connect() as connection:
-            query = db.select([GroupsInfo_tbl.columns.supergroupid])
-            result = connection.execute(query).fetchall()
-            for row in result:
-                CachedSupergroups.append(row[0])
-
-    UpdateTime = time.strftime("%c")
-
+    if not FirstTimeRunning:
+        connection = engine.connect()
+        query = db.select([GroupsInfo_tbl.columns.supergroupid])
+        result = connection.execute(query).fetchall()
+        for row in result:
+            CachedSupergroups.append(row[0])
+        connection.close()
 
     UserId = await client.get_me()
     UserId = UserId.id
@@ -115,32 +112,48 @@ async def GetStats():
                 NumUser = NumUser + 1
         if dialog.is_channel:
             if dialog.is_group:
-                NumSuper = NumSuper +1
+                NumSuper = NumSuper + 1
             else:
                 NumChannel = NumChannel + 1
     completed = 0
-    bar = progressbar.ProgressBar(max_value=NumSuper, widget=None, poll_interval=1)
+    bar = progressbar.ProgressBar(
+        max_value=NumSuper,
+        widget=None,
+        poll_interval=1)
     bar.update(completed)
     for dialog in dialogs:
         if dialog.is_channel:
             if dialog.is_group:
-                    ID1 = utils.get_peer_id(utils.get_input_peer(dialog, allow_self=False))
-                    strid = str(ID1).replace("-100", "")
-                    ID = int(strid)
-                    if ID not in CachedSupergroups:
-                        ent = await client.get_input_entity(ID1)
-                        gotChatFull = await client(GetFullChannelRequest(ent))
-                        with engine.connect() as connection:
-                            query = db.insert(GroupsInfo_tbl).values(supergroupid=gotChatFull.full_chat.id,
-                                                                        oldgroupid=gotChatFull.full_chat.migrated_from_chat_id)
-                            connection.execute(query)
+                ID1 = utils.get_peer_id(
+                    utils.get_input_peer(
+                        dialog, allow_self=False))
+                strid = str(ID1).replace("-100", "")
+                ID = int(strid)
+                if ID not in CachedSupergroups:
+                    ent = await client.get_input_entity(ID1)
+                    gotChatFull = await client(GetFullChannelRequest(ent))
+                    connection = engine.connect()
+                    trans = connection.begin()
+
+                    query = db.insert(GroupsInfo_tbl).values(
+                        supergroupid=gotChatFull.full_chat.id,
+                        oldgroupid=gotChatFull.full_chat.migrated_from_chat_id)
+
+                    trans = connection.begin()
+                    connection.execute(query)
+                    trans.commit()
+                    connection.close()
+                    trans.close()
+
 
     LookIds = []
 
     for dialog in dialogs:
         ID = None
         try:
-            ID = utils.get_peer_id(utils.get_input_peer(dialog, allow_self=False))
+            ID = utils.get_peer_id(
+                utils.get_input_peer(
+                    dialog, allow_self=False))
         except Exception:
             ID = UserId
         if dialog.is_channel:
@@ -153,24 +166,32 @@ async def GetStats():
 
     for dialog in dialogs:
         if dialog.is_group:
-            ID = utils.get_peer_id(utils.get_input_peer(dialog, allow_self=False))
+            ID = utils.get_peer_id(
+                utils.get_input_peer(
+                    dialog, allow_self=False))
             strid = str(ID).replace("-100", "")
             ID = int(strid)
-            query = db.select([GroupsInfo_tbl]).where(GroupsInfo_tbl.columns.supergroupid == ID)
-            with engine.connect() as connection:
-                exec = connection.execute(query)
-                result = exec.fetchall()
-                for row in result:
-                    if row[1] is not None:
-                        NewGroupsIDs.append(row[0])
-                        ConvertedGroupsIDs.append(row[1])
+
+            connection = engine.connect()
+            query = db.select(
+                [GroupsInfo_tbl]).where(
+                GroupsInfo_tbl.columns.supergroupid == ID)
+            exec = connection.execute(query)
+            result = exec.fetchall()
+            connection.close()
+            for row in result:
+                if row[1] is not None:
+                    NewGroupsIDs.append(row[0])
+                    ConvertedGroupsIDs.append(row[1])
     bar.finish()
 
     print("Counting your chats...")
 
     for dialog in dialogs:
         try:
-            ID = utils.get_peer_id(utils.get_input_peer(dialog, allow_self=False))
+            ID = utils.get_peer_id(
+                utils.get_input_peer(
+                    dialog, allow_self=False))
         except Exception:
             ID = UserId
         if dialog.is_channel:
@@ -206,51 +227,59 @@ async def GetStats():
     NumChat = NumChat - ConvertedCount
     TotalDialogs = UserCount + ChannelCount + SupCount
 
-    with engine.connect() as connection:
-        if not last_update_time:
-            query = db.insert(stats_tbl).values(
-            updatetime = UpdateTime,
-            totaldialogs = TotalDialogs,
-            usercount = UserCount,
-            channelcount = ChannelCount,
-            supcount = SupCount,
-            convertedgroups = ConvertedCount,
-            numchannel = NumChannel,
-            numuser = NumUser,
-            numdeleted = NumDeleted,
-            numbot = NumBot,
-            numchat = NumChat,
-            numsuper = NumSuper,
-            )
-        else:
-            query = db.update(stats_tbl).values(
-            updatetime = UpdateTime,
-            totaldialogs = TotalDialogs,
-            usercount = UserCount,
-            channelcount = ChannelCount,
-            supcount = SupCount,
-            convertedgroups = ConvertedCount,
-            numchannel = NumChannel,
-            numuser = NumUser,
-            numdeleted = NumDeleted,
-            numbot = NumBot,
-            numchat = NumChat,
-            numsuper = NumSuper,
-            )
-        connection.execute(query)
+    connection = engine.connect()
+
+    if not FirstTimeRunning:
+        query = db.insert(stats_tbl).values(
+        updatetime = UpdateTime,
+        totaldialogs = TotalDialogs,
+        usercount = UserCount,
+        channelcount = ChannelCount,
+        supcount = SupCount,
+        convertedgroups = ConvertedCount,
+        numchannel = NumChannel,
+        numuser = NumUser,
+        numdeleted = NumDeleted,
+        numbot = NumBot,
+        numchat = NumChat,
+        numsuper = NumSuper,
+        )
+    else:
+        query = db.update(stats_tbl).values(
+        updatetime = UpdateTime,
+        totaldialogs = TotalDialogs,
+        usercount = UserCount,
+        channelcount = ChannelCount,
+        supcount = SupCount,
+        convertedgroups = ConvertedCount,
+        numchannel = NumChannel,
+        numuser = NumUser,
+        numdeleted = NumDeleted,
+        numbot = NumBot,
+        numchat = NumChat,
+        numsuper = NumSuper,
+        )
+    trans = connection.begin()
+    connection.execute(query)
+    trans.commit()
+    connection.close()
+    trans.close()
 
 
+    print("DONE!! You can see your stats by sending .stats in any chat")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.stats"))
 @client.log_exception
 async def show_stats(e):
     stats = None
-    with engine.connect() as connection:
-        query = db.select([stats_tbl])
-        result = connection.execute(query).fetchall()
-        if result:
-            stats = result[0]
+
+    connection = engine.connect()
+    query = db.select([stats_tbl])
+    result = connection.execute(query).fetchall()
+    if result:
+        stats = result[0]
+    connection.close()
 
     if stats:
         updatetime, totaldialogs, usercount, channelcount, supcount, convertedgroups, numchannel, numuser, numdeleted, numbot, numchat, numsuper = (
@@ -284,4 +313,4 @@ async def show_stats(e):
 
         await e.edit(REPLY)
     else:
-        await e.edit("`Stats are unavailable `.")
+        await e.edit("`Stats are unavailable!! Try again later. `")
