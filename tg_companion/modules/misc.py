@@ -22,7 +22,7 @@ from .._version import __version__
 async def ping(e):
     start_time = time.time()
     async with aiohttp.ClientSession() as session:
-        await session.get("https://api.telegram.org")
+        await session.get("https://www.google.com")
     end_time = time.time()
     ping_time = float(end_time - start_time) * 1000
     await e.edit(f"Ping time was: {ping_time}ms")
