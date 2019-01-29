@@ -14,13 +14,15 @@ engine = db.create_engine(DB_URI)
 metadata = db.MetaData()
 
 private_messages_tbl = db.Table("private_messages", metadata,
-                        db.Column("chat_id", db.Integer()))
-
+                                db.Column("chat_id", db.Integer()))
 
 
 connection = engine.connect()
 
-metadata.create_all(bind=engine, tables=[private_messages_tbl], checkfirst=True)
+metadata.create_all(
+    bind=engine,
+    tables=[private_messages_tbl],
+    checkfirst=True)
 
 db.insert(private_messages_tbl).values(chat_id=0)
 query = db.select([private_messages_tbl])
@@ -41,9 +43,9 @@ async def await_permission(e):
     if NOPM_SPAM is True and e.is_private:
         chat = await e.get_chat()
         private_in_db = []
-        if not chat.id in ACCEPTED_USERS:
+        if chat.id not in ACCEPTED_USERS:
 
-            if not chat.id in PM_WARNS:
+            if chat.id not in PM_WARNS:
                 PM_WARNS.update({chat.id: 0})
 
             if PM_WARNS[chat.id] == 3:
@@ -65,10 +67,10 @@ async def await_permission(e):
 @client.on(events.NewMessage(outgoing=True))
 @client.log_exception
 async def accept_permission(e):
-        if e.out:
-            chat = await e.get_chat()
+    if e.out:
+        chat = await e.get_chat()
 
-        if chat.id in PM_WARNS:
-            del PM_WARNS[chat.id]
+    if chat.id in PM_WARNS:
+        del PM_WARNS[chat.id]
 
-        ACCEPTED_USERS.append(chat.id)
+    ACCEPTED_USERS.append(chat.id)

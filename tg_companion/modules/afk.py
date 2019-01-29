@@ -4,6 +4,7 @@ from tg_companion.tgclient import client
 
 USER_AFK = {}
 
+
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.afk?(.+)"))
 @client.log_exception
 async def afk(e):

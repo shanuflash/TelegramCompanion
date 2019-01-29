@@ -87,9 +87,6 @@ async def user_info(e):
     )
 
 
-
-
-
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\$"))
 @client.log_exception
 async def rextestercli(e):

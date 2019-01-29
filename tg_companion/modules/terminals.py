@@ -127,7 +127,6 @@ async def upload_file(e):
     await client.upload_from_disk(e, to_upload, force_document=True)
 
 
-
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.rupload (.+)"))
 @client.log_exception
 async def ssh_upload_file(e):

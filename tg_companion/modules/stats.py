@@ -145,7 +145,6 @@ async def GetStats():
                     connection.close()
                     trans.close()
 
-
     LookIds = []
 
     for dialog in dialogs:
@@ -231,40 +230,39 @@ async def GetStats():
 
     if not FirstTimeRunning:
         query = db.insert(stats_tbl).values(
-        updatetime = UpdateTime,
-        totaldialogs = TotalDialogs,
-        usercount = UserCount,
-        channelcount = ChannelCount,
-        supcount = SupCount,
-        convertedgroups = ConvertedCount,
-        numchannel = NumChannel,
-        numuser = NumUser,
-        numdeleted = NumDeleted,
-        numbot = NumBot,
-        numchat = NumChat,
-        numsuper = NumSuper,
+            updatetime=UpdateTime,
+            totaldialogs=TotalDialogs,
+            usercount=UserCount,
+            channelcount=ChannelCount,
+            supcount=SupCount,
+            convertedgroups=ConvertedCount,
+            numchannel=NumChannel,
+            numuser=NumUser,
+            numdeleted=NumDeleted,
+            numbot=NumBot,
+            numchat=NumChat,
+            numsuper=NumSuper,
         )
     else:
         query = db.update(stats_tbl).values(
-        updatetime = UpdateTime,
-        totaldialogs = TotalDialogs,
-        usercount = UserCount,
-        channelcount = ChannelCount,
-        supcount = SupCount,
-        convertedgroups = ConvertedCount,
-        numchannel = NumChannel,
-        numuser = NumUser,
-        numdeleted = NumDeleted,
-        numbot = NumBot,
-        numchat = NumChat,
-        numsuper = NumSuper,
+            updatetime=UpdateTime,
+            totaldialogs=TotalDialogs,
+            usercount=UserCount,
+            channelcount=ChannelCount,
+            supcount=SupCount,
+            convertedgroups=ConvertedCount,
+            numchannel=NumChannel,
+            numuser=NumUser,
+            numdeleted=NumDeleted,
+            numbot=NumBot,
+            numchat=NumChat,
+            numsuper=NumSuper,
         )
     trans = connection.begin()
     connection.execute(query)
     trans.commit()
     connection.close()
     trans.close()
-
 
     print("DONE!! You can see your stats by sending .stats in any chat")
 

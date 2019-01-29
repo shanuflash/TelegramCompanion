@@ -71,10 +71,10 @@ class CompanionClient(TelegramClient):
             f_name = os.path.basename(path)
             f_size, unit = self.convert_file_size(os.path.getsize(f_name))
             await event.edit(
-                        f"**Uploading**:\n\n"
-                        f"  __Folder Name:__ `{f_name}`\n"
-                        f"  __Size__: `{f_size}` {unit}\n"
-                        )
+                f"**Uploading**:\n\n"
+                f"  __Folder Name:__ `{f_name}`\n"
+                f"  __Size__: `{f_size}` {unit}\n"
+            )
 
             await self.send_file(event.chat_id, path, file_name=f_name,
                                  force_document=force_document, reply_to=reply_to, progress_callback=None)
@@ -96,10 +96,10 @@ class CompanionClient(TelegramClient):
                     memzip.seek(0)
                     d_size, unit = self.convert_file_size(d_size)
                     await event.edit(
-                                f"**Uploading**:\n\n"
-                                f"  __Folder Name:__ `{d_name}`\n"
-                                f"  __Size__: `{d_size}` {unit}\n"
-                                )
+                        f"**Uploading**:\n\n"
+                        f"  __Folder Name:__ `{d_name}`\n"
+                        f"  __Size__: `{d_size}` {unit}\n"
+                    )
 
                     await client.send_file(event.chat_id, file=memzip, allow_cache=None, progress_callback=None)
                     await event.delete()
@@ -109,12 +109,18 @@ class CompanionClient(TelegramClient):
         else:
             await event.edit(f"{path} doesn't exist.")
             return
+
     def convert_file_size(self, size):
         power = 2**10
         n = 0
-        units = {0 : '', 1: 'kilobytes', 2: 'megabytes', 3: 'gigabytes', 4: 'terabytes'}
+        units = {
+            0: '',
+            1: 'kilobytes',
+            2: 'megabytes',
+            3: 'gigabytes',
+            4: 'terabytes'}
         while size > power:
-            size /=  power
+            size /= power
             n += 1
         return round(size, 2), units[n]
 
