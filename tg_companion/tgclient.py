@@ -105,8 +105,10 @@ class CompanionClient(TelegramClient):
                     await event.delete()
             except FileNotFoundError:
                 await event.edit(f"`{path}` doesn't exist.")
+                return
         else:
             await event.edit(f"{path} doesn't exist.")
+            return
 
     def on_timer(self, seconds):
         """
