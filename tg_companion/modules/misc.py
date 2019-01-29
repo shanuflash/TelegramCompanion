@@ -4,7 +4,6 @@ import platform
 import re
 import sys
 import time
-import zipfile
 
 import aiohttp
 import telethon
@@ -13,7 +12,6 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
 from tg_companion.modules.rextester.api import Rextester, UnknownLanguage
-from tg_companion.modules.sql import stats_sql as sql
 from tg_companion.tgclient import client
 
 from .._version import __version__
