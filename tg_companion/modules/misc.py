@@ -138,15 +138,14 @@ async def rextestercli(e):
 @client.log_exception
 async def send_logs(e):
 
-    files_in_dir = os.listdir("logs/")
+
     chat = await e.get_chat()
 
-    if len(files_in_dir) == 1:
-        print(files_in_dir[0])
-        await client.upload_from_disk(e, f"logs/{files_in_dir[0]}")
-        return
-
-    await client.upload_from_disk(e, "logs/")
+    if os.path.isdir("logs/"):
+        files_in_dir = os.listdir("logs/")
+        await client.upload_from_disk(e, "logs/")
+    else:
+        await e.edit("`There are no logs saved!s`")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"^\.exec\s+([\s\S]+)"))
