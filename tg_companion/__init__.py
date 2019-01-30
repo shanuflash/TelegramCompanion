@@ -4,6 +4,7 @@ import sys
 import os
 import logging
 import dotenv
+import re
 
 
 logging.basicConfig(
@@ -23,6 +24,8 @@ parser = ArgumentParser()
 parser.add_argument(
     "--config", help="Display all the config variables", action="store_true"
 )
+
+parser.add_argument("--install", help="Install any given plugin. Usage: --install <pluginname> or <user/repo/plugin_name>.")
 
 CONFIG_VALUES = [
     "APP_ID         : Your telegram app id from https://my.telegram.org/apps",
@@ -48,9 +51,14 @@ CONFIG_VALUES = [
 ]
 
 args = parser.parse_args()
+
+TO_INSTALL = ""
 if args.config:
     print("\n".join(CONFIG_VALUES))
     quit(1)
+    
+if args.install:
+    TO_INSTALL = args.install
 
 
 dotenv.load_dotenv("config.env")
