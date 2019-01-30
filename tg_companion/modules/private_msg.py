@@ -27,8 +27,6 @@ metadata.create_all(
 db.insert(private_messages_tbl).values(chat_id=0)
 query = db.select([private_messages_tbl])
 load_privates = connection.execute(query).fetchall()
-
-connection.close()
 for row in load_privates:
     if row:
         ACCEPTED_USERS.append(row[0])
@@ -42,7 +40,6 @@ async def await_permission(e):
 
     if NOPM_SPAM is True and e.is_private:
         chat = await e.get_chat()
-        private_in_db = []
         if chat.id not in ACCEPTED_USERS:
 
             if chat.id not in PM_WARNS:
@@ -67,10 +64,13 @@ async def await_permission(e):
 @client.on(events.NewMessage(outgoing=True))
 @client.log_exception
 async def accept_permission(e):
-    if e.out:
-        chat = await e.get_chat()
+    chat = await e.get_chat()
 
-    if chat.id in PM_WARNS:
-        del PM_WARNS[chat.id]
+    if chat.id not in ACCEPTED_USERS:
 
-    ACCEPTED_USERS.append(chat.id)
+        if chat.id in PM_WARNS:
+            del PM_WARNS[chat.id]
+        connection = engine.connect()
+        query = db.insert(private_messages_tbl).values(chat_id = chat.id    )
+        ACCEPTED_USERS.append(chat.id)
+        connection.close()

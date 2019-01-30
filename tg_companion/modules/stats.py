@@ -71,8 +71,12 @@ async def GetStats():
         metadata.create_all(
             bind=engine, tables=[
                 stats_tbl, GroupsInfo_tbl])
-        FirstTimeRunning = True
     connection.close()
+
+    connection = engine.connect()
+    query = db.select([stats_tbl])
+    if not connection.execute(query).fetchall():
+        FirstTimeRunning = True
 
     if FirstRun:
         print(
@@ -132,18 +136,15 @@ async def GetStats():
                 if ID not in CachedSupergroups:
                     ent = await client.get_input_entity(ID1)
                     gotChatFull = await client(GetFullChannelRequest(ent))
+
                     connection = engine.connect()
-                    trans = connection.begin()
 
                     query = db.insert(GroupsInfo_tbl).values(
                         supergroupid=gotChatFull.full_chat.id,
                         oldgroupid=gotChatFull.full_chat.migrated_from_chat_id)
 
-                    trans = connection.begin()
                     connection.execute(query)
-                    trans.commit()
                     connection.close()
-                    trans.close()
 
     LookIds = []
 
@@ -208,7 +209,7 @@ async def GetStats():
             msgs = await client.get_messages(ent, limit=0)
             count = msgs.total
             if dialog.is_channel:
-                if dialog.entity.megagroup is True:
+                if dialog.entity.megagroup:
                     SupCount = SupCount + count
                 else:
                     ChannelCount = ChannelCount + count
@@ -227,8 +228,9 @@ async def GetStats():
     TotalDialogs = UserCount + ChannelCount + SupCount
 
     connection = engine.connect()
+    query = db.select([stats_tbl.columns.updatetime])
 
-    if not FirstTimeRunning:
+    if not connection.execute(query).fetchall():
         query = db.insert(stats_tbl).values(
             updatetime=UpdateTime,
             totaldialogs=TotalDialogs,
@@ -258,11 +260,8 @@ async def GetStats():
             numchat=NumChat,
             numsuper=NumSuper,
         )
-    trans = connection.begin()
     connection.execute(query)
-    trans.commit()
     connection.close()
-    trans.close()
 
     print("DONE!! You can see your stats by sending .stats in any chat")
 
@@ -290,7 +289,7 @@ async def show_stats(e):
             else:
                 convertedgroups = "all"
         else:
-            convertedgroups = ""
+            convertedgroups = None
 
         REPLY = f"""
 
@@ -306,7 +305,7 @@ async def show_stats(e):
     Number of Normal groups: `{numchat}`
     Number of Private conversations: `{numuser}` from where `{numdeleted}` are now Deleted Accounts.
     Number of Bot conversations:  `{numbot}`
-    Last Update Time :  `{updatetime} `
+    Last Update Time :  `{updatetime}`
     """
 
         await e.edit(REPLY)
