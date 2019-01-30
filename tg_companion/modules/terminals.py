@@ -25,10 +25,10 @@ async def terminal(e):
 
     OUTPUT = f"**QUERY:**\n__Command:__\n`{cmd}` \n__PID:__\n`{process.pid}`\n\n**Output:**\n"
 
-    if cmd in ("ls", "cat"):
+    if any(w in cmd for w in ["ls", "cat"]):
         stdout, stderr = await process.communicate()
 
-        if len(OUTPUT) > 4096:
+        if len(stdout) > 4096:
             await e.reply(f"{OUTPUT}\n__Process killed:__ `Messasge too long`")
             return
 
@@ -84,12 +84,12 @@ async def ssh_terminal(e):
 
         start_time = time.time() + 10
         async with conn.create_process(cmd) as process:
-            if cmd in ("ls", "cat"):
+            if any(w in cmd for w in ["ls", "cat"]):
                 stdout, stderr = await process.communicate()
                 if not stdout:
                     await e.edit(f"{OUTPUT}`{stderr}`")
                     return
-                if len(OUTPUT) > 4096:
+                if len(stdout) > 4096:
                     await e.reply("__Process killed:__ `Messasge too long`")
                     return
                 await e.edit(f"{OUTPUT}`{stdout}`")
