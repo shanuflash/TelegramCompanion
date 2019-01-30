@@ -58,7 +58,7 @@ async def user_info(e):
             return
 
         if not isinstance(user, User):
-            await e.reply(f"`{user}` is not a User")
+            await e.reply(f"`@{user.username}` is not a User")
             return
 
     full_user = await client(GetFullUserRequest(user.id))
