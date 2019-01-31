@@ -9,7 +9,7 @@ async def testplugin(e):
     OUTPUT = f"Plugin Info For: {plugin_name}\n\n"
 
     plugins = PluginManager.load_plugins_info()
-    if plugin_name in plugins.items():
+    if plugin_name in plugins:
 
         dct = plugins[plugin_name]
 
@@ -17,6 +17,8 @@ async def testplugin(e):
             OUTPUT += f"\n{k} : `{v}`"
 
         await e.reply(OUTPUT)
+    else:
+        await e.edit(f"Plugin `{plugin_name}` is not installed")
 
 
 @client.on(events.NewMessage(outgoing=True, pattern=r"\.plugins"))
