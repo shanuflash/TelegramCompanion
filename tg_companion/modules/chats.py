@@ -3,9 +3,10 @@ import os
 import re
 
 from telethon import errors, events
-from telethon.tl.functions.channels import (EditAboutRequest, EditPhotoRequest,
-                                            EditTitleRequest,
-                                            UpdateUsernameRequest)
+from telethon.tl.functions.messages import (EditChatAboutRequest, EditChatPhotoRequest,
+                                            EditChatTitleRequest)
+
+from telethon.tl.functions.channels import UpdateUsernameRequest
 from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
 
 from tg_companion.tgclient import client
@@ -41,7 +42,7 @@ async def update_profile_pic(e):
             await e.edit("`UPLOADING`")
             file = await client.upload_file(photo)
             try:
-                await client(EditPhotoRequest(chat.id, file))
+                await client(EditChatPhotoRequest(chat.id, file))
                 await e.edit("`Channel picture changed`")
 
             except Exception as exc:
@@ -65,7 +66,7 @@ async def update_profile_bio(e):
 
     else:
         try:
-            await client(EditAboutRequest(chat.id, about))
+            await client(EditChatAboutRequest(chat.id, about))
             await e.edit("`Succesfully changed chat about`")
 
         except Exception as exc:
@@ -126,7 +127,7 @@ async def change_profile_name(e):
     title = e.pattern_match.group(1)
     chat = await e.get_chat()
     try:
-        await client(EditTitleRequest(chat.id, title))
+        await client(EditChatTitleRequest(chat.id, title))
         await e.edit("`Succesfully changed channel/chat title`")
 
     except Exception as exc:
