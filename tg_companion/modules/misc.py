@@ -143,7 +143,7 @@ async def send_logs(e):
 
     if os.path.isdir("logs/"):
         files_in_dir = os.listdir("logs/")
-        await client.upload_from_disk(e, "logs/")
+        await client.send_from_disk(e, "logs/")
     else:
         await e.edit("`There are no logs saved!s`")
 

@@ -9,9 +9,9 @@ from datetime import datetime
 from alchemysession import AlchemySessionContainer
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
-from telethon.tl import types
+from telethon.errors.rpcerrorlist import PhoneCodeInvalidError
 
-from tg_companion import APP_HASH, APP_ID, DB_URI, DEBUG, SESSION_NAME, proxy
+from tg_companion import APP_HASH, APP_ID, DB_URI, DEBUG, SESSION_NAME, LOGGER, proxy
 from tg_companion._version import __version__
 from getpass import getpass
 
@@ -22,7 +22,7 @@ loop = asyncio.get_event_loop()
 class CompanionClient(TelegramClient):
 
     def __init__(self, session_name, app_id, app_hash):
-        print("Starting...")
+        LOGGER.info("Starting TelegramCompanion")
         super().__init__(
             session_name,
             app_id,
@@ -30,16 +30,16 @@ class CompanionClient(TelegramClient):
             proxy=proxy,
             app_version=__version__.public())
 
-        print("Connecting to Telegram")
+        ("Connecting to Telegram")
 
         try:
             loop.run_until_complete(self.connect())
         except ConnectionError:
-            print("Failed to connect to Telegram Server.. Retrying")
+            LOGGER.info("Failed to connect to Telegram Server.. Retrying")
             loop.run_until_complete(self.connect())
 
         if not loop.run_until_complete(self.is_user_authorized()):
-            print("Welcome to Telegram CompanionCompanion.. \n\n")
+            LOGGER.info("Welcome to Telegram CompanionCompanion.. \n\n")
             phone = input("Enter your phone: ")
             loop.run_until_complete(self.sign_in(phone))
 
@@ -48,7 +48,6 @@ class CompanionClient(TelegramClient):
 
                 code = input(
                     "Please enter the code you just recieved.. Press enter to send the code via SMS: ")
-                print(code)
 
                 if not code:
                     loop.run_until_complete(
@@ -59,14 +58,19 @@ class CompanionClient(TelegramClient):
                 try:
                     self_user = loop.run_until_complete(
                         self.sign_in(code=code))
-                except SessionPasswordNeededError:
-                    password = getpass(
-                        "Two step verification is enabled. Please enter your password: ")
-                    self_user = loop.run_until_complete(
-                        self.sign_in(password=password))
-        print("Connected!!")
+                except Exception as exc:
+                    if isinstance(exc, PhoneCodeInvalidError):
+                        code = input("The phone code entered was invalid. Try again: ")
+                    elif isinstance(exc, SessionPasswordNeededError):
+                        password = getpass(
+                            "Two step verification is enabled. Please enter your password: ")
+                            
+                        self_user = loop.run_until_complete(
+                            self.sign_in(password=password))
 
-    async def upload_from_disk(self, event, path, caption=None, force_document=False, use_cache=None, reply_to=None):
+        LOGGER.info("Connected!!")
+
+    async def send_from_disk(self, event, path, caption=None, force_document=False, use_cache=None, reply_to=None):
         if os.path.isfile(path):
             f_name = os.path.basename(path)
             f_size, unit = self.convert_file_size(os.path.getsize(f_name))
@@ -191,4 +195,4 @@ class CompanionClient(TelegramClient):
 container = AlchemySessionContainer(DB_URI)
 session = container.new_session(SESSION_NAME)
 
-client = CompanionClient("test_session", APP_ID, APP_HASH)
+client = CompanionClient(session, APP_ID, APP_HASH)

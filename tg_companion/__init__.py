@@ -1,10 +1,10 @@
 from argparse import ArgumentParser
+from distutils.util import strtobool as sb
 import socks
 import sys
 import os
 import logging
 import dotenv
-import re
 
 
 logging.basicConfig(
@@ -28,26 +28,28 @@ parser.add_argument(
 parser.add_argument("--install", help="Install any given plugin. Usage: --install <pluginname> or <user/repo/plugin_name>.")
 
 CONFIG_VALUES = [
-    "APP_ID         : Your telegram app id from https://my.telegram.org/apps",
-    "APP_HASH       : Your telegram app hash from https://my.telegram.org/apps",
-    "DB_URI         : Your postgress database url. Leave empty to disable the modules that use it",
-    "DEBUG          : Set True if you want to generate log files from exceptions",
-    "STATS_TIMER    : (optional) Update stats every x seconds. Default = 3600 seconds. Set to 0 to disable",
-    "BLOCK_PM       : Set to True if you want to block new PMs. New PMs will be deleted and user blocked",
-    "NOPM_SPAM      : Set to True if you want to block users that are spamming your PMs.",
-    "PROXY_TYPE     : Your proxy type HTTP/SOCKS4/SOCKS5. Leave empty to disable proxy.",
-    "HOST           : The host of the used proxy.",
-    "PORT           : The port of the used proxy.",
-    "USERNAME       : The username of the used proxy. (If any)",
-    "PASSWORD       : The password of the used proxy. (If any)",
-    "SESSION_NAME   : Custom session name. Leave empty to use the default session name",
-    "ENABLE_SSH     : Set True if you want to execute/upload from a ssh server",
-    "SSH_HOSTNAME   : SSH: (optional) The hostname or address to connect to.",
-    "SSH_PORT       : SSH: (optional) The hostname or address to connect to.",
-    "SSH_USERNAME   : SSH: (optional) Username to authenticate as on the server.",
-    "SSH_PASSWORD   : SSH: (optional) The password to use for client password authentication",
-    "SSH_PASSPHRASE : SSH: (optional) The passphrase for your ssh connection.",
-    "SSH_KEY        : SSH: (optional) The private key which will be used to authenticate this client",
+    "APP_ID            : (required) Your telegram app id from https://my.telegram.org/apps",
+    "APP_HASH          : (required) Your telegram app hash from https://my.telegram.org/apps",
+    "DB_URI            : (required) Your postgress database url. Leave empty to disable the modules that use it",
+    "DEBUG             : (optional) Set True if you want to generate log files from exceptions",
+    "STATS_TIMER       : (optional) Update stats every x seconds. Default = 3600 seconds. Set to 0 to disable",
+    "BLOCK_PM          : (optional) Set to True if you want to block new PMs. New PMs will be deleted and user blocked",
+    "NOPM_SPAM         : (optional) Set to True if you want to block users that are spamming your PMs.",
+    "SUBPROCESS_ANIM   : (optional) Set to True if you want to enable animations when using a terminal command."
+                            "WARNING: When executing commands with long outputs it might trigger a flood wait that will restrict you from editing any send messages for a given time. Usualy just 250 seconds."
+    "PROXY_TYPE        : (optional) Your proxy type HTTP/SOCKS4/SOCKS5. Leave empty to disable proxy.",
+    "HOST              : (optional) The host of the used proxy.",
+    "PORT              : (optional) The port of the used proxy.",
+    "USERNAME          : (optional) The username of the used proxy. (If any)",
+    "PASSWORD          : (optional) The password of the used proxy. (If any)",
+    "SESSION_NAME      : (optional) Custom session name. Leave empty to use the default session name",
+    "ENABLE_SSH        : (optional) Set True if you want to execute/upload from a ssh server",
+    "SSH_HOSTNAME      : (optional) The hostname or address to connect to.",
+    "SSH_PORT          : (optional) The hostname or address to connect to.",
+    "SSH_USERNAME      : (optional) Username to authenticate as on the server.",
+    "SSH_PASSWORD      : (optional) The password to use for client password authentication",
+    "SSH_PASSPHRASE    : (optional) The passphrase for your ssh connection.",
+    "SSH_KEY           : (optional) The private key which will be used to authenticate this client",
 ]
 
 args = parser.parse_args()
@@ -56,7 +58,7 @@ TO_INSTALL = ""
 if args.config:
     print("\n".join(CONFIG_VALUES))
     quit(1)
-    
+
 if args.install:
     TO_INSTALL = args.install
 
@@ -67,7 +69,7 @@ APP_ID = os.environ.get("APP_ID", None)
 APP_HASH = os.environ.get("APP_HASH", None)
 SESSION_NAME = os.environ.get("SESSION_NAME", "tg_companion")
 DB_URI = os.environ.get("DB_URI", None)
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = sb(os.environ.get("DEBUG", "False"))
 
 PROXY_TYPE = os.environ.get("PROXY_TYPE", None)
 HOST = os.environ.get("HOST", None)
@@ -75,11 +77,12 @@ PORT = os.environ.get("PORT", None)
 USERNAME = os.environ.get("USERNAME", None)
 PASSWORD = os.environ.get("PASSWORD", None)
 
-BLOCK_PM = os.environ.get("BLOCK_PM", False)
-NOPM_SPAM = os.environ.get("NOPM_SPAM", False)
+BLOCK_PM = sb(os.environ.get("BLOCK_PM", "False"))
+NOPM_SPAM = sb(os.environ.get("NOPM_SPAM", "False"))
 STATS_TIMER = int(os.environ.get("STATS_TIMER", 3600))
+SUBPROCESS_ANIM = sb(os.environ.get("SUBPROCESS_ANIM", "False"))
 
-ENABLE_SSH = os.environ.get('ENABLE_SSH', False)
+ENABLE_SSH = sb(os.environ.get('ENABLE_SSH', "False"))
 SSH_HOSTNAME = os.environ.get('SSH_HOSTNAME', '::1')
 SSH_PORT = os.environ.get('SSH_PORT', 22)
 SSH_USERNAME = os.environ.get('SSH_USERNAME', None)

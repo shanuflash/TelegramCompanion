@@ -4,8 +4,6 @@ import glob
 import aiohttp
 import asyncio
 import re
-import sys
-import os
 
 
 class PluginManager:
